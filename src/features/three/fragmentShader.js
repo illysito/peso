@@ -56,6 +56,7 @@ void main()
 
   // IMG
 
+  // float displacementCoef = 1.0 * (0.1 - uv.y * 2.0);
   float displacementCoef = 0.4;
 
   // gravity
@@ -76,13 +77,13 @@ void main()
   // displacement + color split
   vec4 d_img_1 = texture2D(u_image_1, uvDisplaced1);
   float r1 = texture2D(u_image_1, vec2(uvDisplaced1.x, uvDisplaced1.y + 0.15 * u_red)).r;
-  float g1 = texture2D(u_image_1, vec2(uvDisplaced1.x, uvDisplaced1.y + 0.15 * u_green)).g;
+  float g1 = texture2D(u_image_1, vec2(uvDisplaced1.x, uvDisplaced1.y + 0.1 * u_green)).g;
   float b1 = texture2D(u_image_1, vec2(uvDisplaced1.x - 0.08 * u_blue, uvDisplaced1.y + 0.15 * u_blue)).b;
   d_img_1 = vec4(r1, g1, b1, 1.0);
 
   vec4 d_img_2 = texture2D(u_image_1, uvDisplaced2);
   float r2 = texture2D(u_image_1, vec2(uvDisplaced2.x, uvDisplaced2.y - 0.1 * u_red)).r;
-  float g2 = texture2D(u_image_1, vec2(uvDisplaced2.x + 0.08 * u_red, uvDisplaced2.y - 0.1 * u_green)).g;
+  float g2 = texture2D(u_image_1, vec2(uvDisplaced2.x + 0.08 * u_red, uvDisplaced2.y - 0.05 * u_green)).g;
   float b2 = texture2D(u_image_1, vec2(uvDisplaced2.x, uvDisplaced2.y - 0.1 * u_blue)).b;
   d_img_2 = vec4(r2, g2, b2, 1.0);
 

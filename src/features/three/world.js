@@ -74,9 +74,14 @@ export default class World {
     const loader = new THREE.TextureLoader()
 
     const [img1, disp] = await Promise.all([
+      // loader.loadAsync(
+      //   githubToJsDelivr(
+      //     'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
+      //   )
+      // ),
       loader.loadAsync(
         githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
+          'https://github.com/illysito/peso/blob/0b6597b7e24369b4a3c5158416d13a7b701cb236/imgs/test%20img%202.webp'
         )
       ),
       loader.loadAsync(
@@ -127,7 +132,7 @@ export default class World {
 
     navLink.addEventListener('mouseenter', () => {
       const randomIndex = Math.floor(Math.random() * offsetColors.length)
-      const randomOffset = 0.02 + Math.random() * 0.1
+      const randomOffset = 0.02 + Math.random() * 0.08
       offsetColors[randomIndex] = randomOffset
       const tl = gsap.timeline({
         onComplete: () => {
