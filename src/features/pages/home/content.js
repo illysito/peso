@@ -3,7 +3,7 @@ import gsap from 'gsap'
 import randomChar from '../../functions/randomChar'
 import revealLines from '../../functions/revealLines'
 
-function projects() {
+function content() {
   const projectHeadings = document.querySelectorAll('.content-h')
   const projectDescriptions = document.querySelectorAll('.content-p')
   const projectImgWrappers = document.querySelectorAll('.content-img-wrapper')
@@ -55,4 +55,4 @@ function projects() {
   })
 }
 
-export default projects
+export default content

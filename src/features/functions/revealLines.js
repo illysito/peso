@@ -2,12 +2,12 @@ import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import SplitType from 'split-type'
 
-import randomChar from './randomChar'
+// import randomChar from './randomChar'
 
 gsap.registerPlugin(ScrollTrigger)
 
 function revealLines(input) {
-  console.log(input)
+  // console.log(input)
   // const input = document.querySelector('.content-h')
 
   // split hero heading
@@ -53,7 +53,7 @@ function revealLines(input) {
   //     randomChar(line)
   //   })
   // }
-  console.log(randomChar)
+  // console.log(randomChar)
 }
 
 export default revealLines

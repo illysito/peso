@@ -4,7 +4,7 @@ import SplitType from 'split-type'
 
 gsap.registerPlugin(ScrollTrigger)
 
-function hero() {
+function nav() {
   const heroSection = document.querySelector('.hero__section')
   const heroHeading = document.querySelector('.logo-h')
 
@@ -99,4 +99,4 @@ function hero() {
   })
 }
 
-export default hero
+export default nav
