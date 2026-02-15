@@ -124,7 +124,7 @@ export default class World {
       // azahar
       loader.loadAsync(
         githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
+          'https://github.com/illysito/peso/blob/44ca43cf8d88d16f4fa3bce0caeb8f25b0c31a60/imgs/_Azahar1.webp'
         )
       ),
       loader.loadAsync(
@@ -160,7 +160,7 @@ export default class World {
       // azahar
       loader.loadAsync(
         githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/1d881a991d9562135d7a3123b4d44682860c2e89/imgs/Azahar2.jpg'
+          'https://github.com/illysito/peso/blob/44ca43cf8d88d16f4fa3bce0caeb8f25b0c31a60/imgs/_Azahar2.webp'
         )
       ),
       loader.loadAsync(
