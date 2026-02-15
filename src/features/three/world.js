@@ -121,6 +121,7 @@ export default class World {
           'https://github.com/illysito/peso/blob/0b321199ab67aa71ec8601bcf7461aa1525e9cee/imgs/DavidGoliat_1.webp'
         )
       ),
+      // azahar
       loader.loadAsync(
         githubToJsDelivr(
           'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
@@ -128,7 +129,7 @@ export default class World {
       ),
       loader.loadAsync(
         githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
+          'https://github.com/illysito/peso/blob/1d881a991d9562135d7a3123b4d44682860c2e89/imgs/Azahar1.jpg'
         )
       ),
     ])
@@ -156,9 +157,10 @@ export default class World {
           'https://github.com/illysito/peso/blob/0b321199ab67aa71ec8601bcf7461aa1525e9cee/imgs/DavidGoliat_2.webp'
         )
       ),
+      // azahar
       loader.loadAsync(
         githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
+          'https://github.com/illysito/peso/blob/1d881a991d9562135d7a3123b4d44682860c2e89/imgs/Azahar2.jpg'
         )
       ),
       loader.loadAsync(
