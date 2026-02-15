@@ -138,7 +138,7 @@ export default class World {
   }
 
   render() {
-    // this.time += 0.5
+    this.time += 0.5
     this.frameCount++
 
     const now = performance.now()
@@ -149,9 +149,13 @@ export default class World {
     }
 
     // animate here
-    // this.material.uniforms.u_time.value = 0.002 * this.time
-    // this.material.uniforms.u_offset.value = 0.02 * this.time
+    if (this.imageStore) {
+      this.imageStore.forEach((img) => {
+        img.mesh.material.uniforms.u_time.value = 0.002 * this.time
+      })
+    }
     this.setImagePositions()
+
     // render & loop
     this.renderer.render(this.scene, this.camera)
     requestAnimationFrame(this.render.bind(this))

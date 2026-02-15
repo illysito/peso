@@ -46,7 +46,7 @@ function randomChar(input) {
   let charCounter = 0
   const selectedChars = []
   for (const char of split.chars) {
-    if (charCounter >= 12) break
+    if (charCounter >= split.chars.length / 2) break
 
     const isValid = /^[a-zñ]$/.test(char.textContent)
 

@@ -53,7 +53,7 @@ void main()
   // NOISE
 
   float noise = random(uv + sin(u_time));
-  float noiseFactor = 0.08 + 0.1 * u_grain;
+  float noiseFactor = 0.1 + 0.1 * u_grain;
 
   // IMG
 
