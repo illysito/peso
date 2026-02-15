@@ -16,6 +16,9 @@ function githubToJsDelivr(permalink) {
 
 export default class World {
   constructor() {
+    this.lastTime = performance.now()
+    this.frameCount = 0
+
     this.time = 0
 
     // sizes
@@ -36,6 +39,15 @@ export default class World {
     this.camera.position.z = 600
     this.updateCamera()
 
+    // images
+    this.domImageWrappers = [
+      ...document.querySelectorAll('.content-img-wrapper'),
+    ]
+
+    // scroll
+    this.scrollY = window.lenis?.scroll ?? window.scrollY
+    // console.log('first scroll value:', this.scrollY)
+
     // renderer
     this.renderer = new THREE.WebGLRenderer({
       canvas: canvas,
@@ -47,18 +59,25 @@ export default class World {
     this.renderer.setClearColor(0x000000, 0)
 
     this.resize()
-    this.setupResize()
     this.init()
   }
 
   async init() {
-    await this.addObjects()
+    // await this.loadTextures()
+    await this.addImages()
+    this.setupListeners()
+    this.setImagePositions()
+    // this.addObjects()
     this.render()
     this.gsap()
   }
 
-  setupResize() {
+  setupListeners() {
     window.addEventListener('resize', this.resize.bind(this))
+    const lenis = window.lenis
+    lenis.on('scroll', ({ scroll }) => {
+      this.scrollY = scroll
+    })
   }
 
   resize() {
@@ -71,13 +90,36 @@ export default class World {
     this.camera.updateProjectionMatrix()
   }
 
-  async addObjects() {
-    // images
+  async loadTextures() {
     const loader = new THREE.TextureLoader()
-    const [img1, img2, disp] = await Promise.all([
+    const perlin = await loader.loadAsync(
+      githubToJsDelivr(
+        'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/perlinSquare.jpg'
+      )
+    )
+
+    const texturesFront = await Promise.all([
       loader.loadAsync(
         githubToJsDelivr(
           'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
+        )
+      ),
+      loader.loadAsync(
+        githubToJsDelivr(
+          'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
+        )
+      ),
+      loader.loadAsync(
+        githubToJsDelivr(
+          'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
+        )
+      ),
+    ])
+
+    const texturesBack = await Promise.all([
+      loader.loadAsync(
+        githubToJsDelivr(
+          'https://github.com/illysito/peso/blob/0b6597b7e24369b4a3c5158416d13a7b701cb236/imgs/test%20img%202.webp'
         )
       ),
       loader.loadAsync(
@@ -87,44 +129,29 @@ export default class World {
       ),
       loader.loadAsync(
         githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/perlinSquare.jpg'
+          'https://github.com/illysito/peso/blob/0b6597b7e24369b4a3c5158416d13a7b701cb236/imgs/test%20img%202.webp'
         )
       ),
     ])
 
-    // get dimensions
-    const domImageWrappers = document.querySelectorAll('.content-img-wrapper')
-    const domWrapperWidth = domImageWrappers[1].getBoundingClientRect().width
-
-    // object
-    this.geometry = new THREE.PlaneGeometry(domWrapperWidth, domWrapperWidth, 1)
-    this.material = new THREE.ShaderMaterial({
-      fragmentShader: frag,
-      vertexShader: vert,
-      uniforms: {
-        u_time: { value: 0 },
-        u_resolution: { value: new THREE.Vector2(1, 1) },
-        u_offset: { value: 0 },
-        u_red: { value: 0 },
-        u_green: { value: 0 },
-        u_blue: { value: 0 },
-        u_image_1: { value: img1 },
-        u_image_2: { value: img2 },
-        u_displacement: { value: disp },
-      },
-    })
-    // console.log(this.material)
-    this.mesh = new THREE.Mesh(this.geometry, this.material)
-    this.scene.add(this.mesh)
+    return { perlin, texturesFront, texturesBack }
   }
 
   render() {
-    this.time += 0.5
+    // this.time += 0.5
+    this.frameCount++
+
+    const now = performance.now()
+    if (now - this.lastTime >= 1000) {
+      console.log('FPS:', this.frameCount)
+      this.frameCount = 0
+      this.lastTime = now
+    }
 
     // animate here
-    this.material.uniforms.u_time.value = 0.002 * this.time
+    // this.material.uniforms.u_time.value = 0.002 * this.time
     // this.material.uniforms.u_offset.value = 0.02 * this.time
-
+    this.setImagePositions()
     // render & loop
     this.renderer.render(this.scene, this.camera)
     requestAnimationFrame(this.render.bind(this))
@@ -135,145 +162,196 @@ export default class World {
       (2 * Math.atan(window.innerHeight / 2 / this.camera.position.z) * 180) /
       Math.PI
     this.camera.fov = this.fov
-    console.log(this.camera.fov)
+    // console.log(this.camera.fov)
+  }
+
+  async addImages() {
+    const { perlin, texturesFront, texturesBack } = await this.loadTextures()
+    this.imageStore = this.domImageWrappers.map((img, index) => {
+      let bounds = img.getBoundingClientRect()
+
+      // create a mesh for each image
+      let geometry = new THREE.PlaneGeometry(bounds.width, bounds.height, 1, 1)
+      let material = new THREE.ShaderMaterial({
+        fragmentShader: frag,
+        vertexShader: vert,
+        uniforms: {
+          u_time: { value: 0 },
+          u_resolution: { value: new THREE.Vector2(1, 1) },
+          u_offset: { value: 0 },
+          u_red: { value: 0 },
+          u_green: { value: 0 },
+          u_blue: { value: 0 },
+          u_image_1: { value: texturesFront[index] },
+          u_image_2: { value: texturesBack[index] },
+          u_displacement: { value: perlin },
+        },
+      })
+      let mesh = new THREE.Mesh(geometry, material)
+
+      this.scene.add(mesh)
+
+      return {
+        img: img,
+        mesh: mesh,
+        top: bounds.top,
+        left: bounds.left,
+        width: bounds.width,
+        height: bounds.height,
+      }
+    })
+
+    this.renderer.compile(this.scene, this.camera)
+    this.renderer.render(this.scene, this.camera)
+  }
+
+  setImagePositions() {
+    // console.log(this.imageStore)
+    this.imageStore.forEach((item) => {
+      const rect = item.img.getBoundingClientRect()
+
+      item.mesh.position.x = rect.left - this.w / 2 + rect.width / 2 // operating with img width and screen width shift coord system from DOM to three.js
+      item.mesh.position.y = -rect.top + this.h / 2 - rect.height / 2
+    })
   }
 
   // gsap
   gsap() {
-    const navLink = document.querySelector('.nav-link')
     const dur = 1.2
     const offsetColors = [0.0, 0.0, 0.0]
 
-    navLink.addEventListener('mouseenter', () => {
-      const randomIndex = Math.floor(Math.random() * offsetColors.length)
-      const randomOffset = 0.02 + Math.random() * 0.08
-      offsetColors[randomIndex] = randomOffset
-      const tl = gsap.timeline({
-        onComplete: () => {
-          offsetColors.forEach((_, i) => {
-            offsetColors[i] = 0.0
-          })
-        },
+    this.domImageWrappers.forEach((img, index) => {
+      img.addEventListener('mouseenter', () => {
+        const randomIndex = Math.floor(Math.random() * offsetColors.length)
+        const randomOffset = 0.02 + Math.random() * 0.08
+        offsetColors[randomIndex] = randomOffset
+        const tl = gsap.timeline({
+          onComplete: () => {
+            offsetColors.forEach((_, i) => {
+              offsetColors[i] = 0.0
+            })
+          },
+        })
+
+        tl.to(this.imageStore[index].mesh.material.uniforms.u_offset, {
+          value: 1,
+          duration: dur,
+          ease: 'power3.inOut',
+        })
+          .to(
+            this.imageStore[index].mesh.material.uniforms.u_red,
+            {
+              value: offsetColors[0],
+              duration: dur / 2,
+              ease: 'power2.inOut',
+              onComplete: () => {
+                gsap.to(this.imageStore[index].mesh.material.uniforms.u_red, {
+                  value: 0,
+                  duration: dur / 2,
+                  ease: 'power2.inOut',
+                })
+              },
+            },
+            '<0'
+          )
+          .to(
+            [this.imageStore[index].mesh.material.uniforms.u_green],
+            {
+              value: offsetColors[1],
+              duration: dur / 2,
+              ease: 'power2.inOut',
+              onComplete: () => {
+                gsap.to(this.imageStore[index].mesh.material.uniforms.u_green, {
+                  value: 0,
+                  duration: dur / 2,
+                  ease: 'power2.inOut',
+                })
+              },
+            },
+            '<0'
+          )
+          .to(
+            this.imageStore[index].mesh.material.uniforms.u_blue,
+            {
+              value: offsetColors[2],
+              duration: dur / 2,
+              ease: 'power2.inOut',
+              onComplete: () => {
+                gsap.to(this.imageStore[index].mesh.material.uniforms.u_blue, {
+                  value: 0,
+                  duration: dur / 2,
+                  ease: 'power2.inOut',
+                })
+              },
+            },
+            '<0'
+          )
       })
 
-      tl.to(this.material.uniforms.u_offset, {
-        value: 1,
-        duration: dur,
-        ease: 'power3.inOut',
+      img.addEventListener('mouseleave', () => {
+        const randomIndex = Math.floor(Math.random() * offsetColors.length)
+        offsetColors[randomIndex] = 0.1
+        const tl = gsap.timeline({
+          onComplete: () => {
+            offsetColors.forEach((_, i) => {
+              offsetColors[i] = 0.0
+            })
+          },
+        })
+        tl.to(this.imageStore[index].mesh.material.uniforms.u_offset, {
+          value: 0,
+          duration: dur,
+          ease: 'power3.inOut',
+        })
+          .to(
+            this.imageStore[index].mesh.material.uniforms.u_red,
+            {
+              value: offsetColors[0],
+              duration: dur / 2,
+              ease: 'power2.inOut',
+              onComplete: () => {
+                gsap.to(this.imageStore[index].mesh.material.uniforms.u_red, {
+                  value: 0,
+                  duration: dur / 2,
+                  ease: 'power2.inOut',
+                })
+              },
+            },
+            '<0'
+          )
+          .to(
+            this.imageStore[index].mesh.material.uniforms.u_green,
+            {
+              value: offsetColors[1],
+              duration: dur / 2,
+              ease: 'power2.inOut',
+              onComplete: () => {
+                gsap.to(this.imageStore[index].mesh.material.uniforms.u_green, {
+                  value: 0,
+                  duration: dur / 2,
+                  ease: 'power2.inOut',
+                })
+              },
+            },
+            '<0'
+          )
+          .to(
+            this.imageStore[index].mesh.material.uniforms.u_blue,
+            {
+              value: offsetColors[2],
+              duration: dur / 2,
+              ease: 'power2.inOut',
+              onComplete: () => {
+                gsap.to(this.imageStore[index].mesh.material.uniforms.u_blue, {
+                  value: 0,
+                  duration: dur / 2,
+                  ease: 'power2.inOut',
+                })
+              },
+            },
+            '<0'
+          )
       })
-        .to(
-          [this.material.uniforms.u_red],
-          {
-            value: offsetColors[0],
-            duration: dur / 2,
-            ease: 'power2.inOut',
-            onComplete: () => {
-              gsap.to([this.material.uniforms.u_red], {
-                value: 0,
-                duration: dur / 2,
-                ease: 'power2.inOut',
-              })
-            },
-          },
-          '<0'
-        )
-        .to(
-          [this.material.uniforms.u_green],
-          {
-            value: offsetColors[1],
-            duration: dur / 2,
-            ease: 'power2.inOut',
-            onComplete: () => {
-              gsap.to([this.material.uniforms.u_green], {
-                value: 0,
-                duration: dur / 2,
-                ease: 'power2.inOut',
-              })
-            },
-          },
-          '<0'
-        )
-        .to(
-          [this.material.uniforms.u_blue],
-          {
-            value: offsetColors[2],
-            duration: dur / 2,
-            ease: 'power2.inOut',
-            onComplete: () => {
-              gsap.to([this.material.uniforms.u_blue], {
-                value: 0,
-                duration: dur / 2,
-                ease: 'power2.inOut',
-              })
-            },
-          },
-          '<0'
-        )
-    })
-
-    navLink.addEventListener('mouseleave', () => {
-      const randomIndex = Math.floor(Math.random() * offsetColors.length)
-      offsetColors[randomIndex] = 0.1
-      const tl = gsap.timeline({
-        onComplete: () => {
-          offsetColors.forEach((_, i) => {
-            offsetColors[i] = 0.0
-          })
-        },
-      })
-      tl.to(this.material.uniforms.u_offset, {
-        value: 0,
-        duration: dur,
-        ease: 'power3.inOut',
-      })
-        .to(
-          [this.material.uniforms.u_red],
-          {
-            value: offsetColors[0],
-            duration: dur / 2,
-            ease: 'power2.inOut',
-            onComplete: () => {
-              gsap.to([this.material.uniforms.u_red], {
-                value: 0,
-                duration: dur / 2,
-                ease: 'power2.inOut',
-              })
-            },
-          },
-          '<0'
-        )
-        .to(
-          [this.material.uniforms.u_green],
-          {
-            value: offsetColors[1],
-            duration: dur / 2,
-            ease: 'power2.inOut',
-            onComplete: () => {
-              gsap.to([this.material.uniforms.u_green], {
-                value: 0,
-                duration: dur / 2,
-                ease: 'power2.inOut',
-              })
-            },
-          },
-          '<0'
-        )
-        .to(
-          [this.material.uniforms.u_blue],
-          {
-            value: offsetColors[2],
-            duration: dur / 2,
-            ease: 'power2.inOut',
-            onComplete: () => {
-              gsap.to([this.material.uniforms.u_blue], {
-                value: 0,
-                duration: dur / 2,
-                ease: 'power2.inOut',
-              })
-            },
-          },
-          '<0'
-        )
     })
   }
 }
