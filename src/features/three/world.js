@@ -99,9 +99,26 @@ export default class World {
     )
 
     const texturesFront = await Promise.all([
+      // galdar en danza
+      loader.loadAsync(
+        githubToJsDelivr(
+          'https://github.com/illysito/peso/blob/0b321199ab67aa71ec8601bcf7461aa1525e9cee/imgs/GaldarEnDanza_1.webp'
+        )
+      ),
       loader.loadAsync(
         githubToJsDelivr(
           'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
+        )
+      ),
+      loader.loadAsync(
+        githubToJsDelivr(
+          'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
+        )
+      ),
+      // david y goliat
+      loader.loadAsync(
+        githubToJsDelivr(
+          'https://github.com/illysito/peso/blob/0b321199ab67aa71ec8601bcf7461aa1525e9cee/imgs/DavidGoliat_1.webp'
         )
       ),
       loader.loadAsync(
@@ -117,9 +134,10 @@ export default class World {
     ])
 
     const texturesBack = await Promise.all([
+      // galdar en danza
       loader.loadAsync(
         githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/0b6597b7e24369b4a3c5158416d13a7b701cb236/imgs/test%20img%202.webp'
+          'https://github.com/illysito/peso/blob/0b321199ab67aa71ec8601bcf7461aa1525e9cee/imgs/GaldarEnDanza_2.webp'
         )
       ),
       loader.loadAsync(
@@ -130,6 +148,22 @@ export default class World {
       loader.loadAsync(
         githubToJsDelivr(
           'https://github.com/illysito/peso/blob/0b6597b7e24369b4a3c5158416d13a7b701cb236/imgs/test%20img%202.webp'
+        )
+      ),
+      // david y goliat
+      loader.loadAsync(
+        githubToJsDelivr(
+          'https://github.com/illysito/peso/blob/0b321199ab67aa71ec8601bcf7461aa1525e9cee/imgs/DavidGoliat_2.webp'
+        )
+      ),
+      loader.loadAsync(
+        githubToJsDelivr(
+          'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
+        )
+      ),
+      loader.loadAsync(
+        githubToJsDelivr(
+          'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
         )
       ),
     ])
