@@ -30,10 +30,11 @@ export default class World {
     this.camera = new THREE.PerspectiveCamera(
       this.fov,
       this.w / this.h,
-      0.01,
-      10
+      100,
+      2000
     )
-    this.camera.position.z = 1
+    this.camera.position.z = 600
+    this.updateCamera()
 
     // renderer
     this.renderer = new THREE.WebGLRenderer({
@@ -66,19 +67,19 @@ export default class World {
     this.renderer.setSize(this.w, this.h)
     this.renderer.setPixelRatio(dpr)
     this.camera.aspect = this.w / this.h
+    this.updateCamera()
     this.camera.updateProjectionMatrix()
   }
 
   async addObjects() {
     // images
     const loader = new THREE.TextureLoader()
-
-    const [img1, disp] = await Promise.all([
-      // loader.loadAsync(
-      //   githubToJsDelivr(
-      //     'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
-      //   )
-      // ),
+    const [img1, img2, disp] = await Promise.all([
+      loader.loadAsync(
+        githubToJsDelivr(
+          'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
+        )
+      ),
       loader.loadAsync(
         githubToJsDelivr(
           'https://github.com/illysito/peso/blob/0b6597b7e24369b4a3c5158416d13a7b701cb236/imgs/test%20img%202.webp'
@@ -91,8 +92,12 @@ export default class World {
       ),
     ])
 
+    // get dimensions
+    const domImageWrappers = document.querySelectorAll('.content-img-wrapper')
+    const domWrapperWidth = domImageWrappers[1].getBoundingClientRect().width
+
     // object
-    this.geometry = new THREE.PlaneGeometry(0.4, 0.4, 1)
+    this.geometry = new THREE.PlaneGeometry(domWrapperWidth, domWrapperWidth, 1)
     this.material = new THREE.ShaderMaterial({
       fragmentShader: frag,
       vertexShader: vert,
@@ -104,6 +109,7 @@ export default class World {
         u_green: { value: 0 },
         u_blue: { value: 0 },
         u_image_1: { value: img1 },
+        u_image_2: { value: img2 },
         u_displacement: { value: disp },
       },
     })
@@ -122,6 +128,14 @@ export default class World {
     // render & loop
     this.renderer.render(this.scene, this.camera)
     requestAnimationFrame(this.render.bind(this))
+  }
+
+  updateCamera() {
+    this.fov =
+      (2 * Math.atan(window.innerHeight / 2 / this.camera.position.z) * 180) /
+      Math.PI
+    this.camera.fov = this.fov
+    console.log(this.camera.fov)
   }
 
   // gsap

@@ -11,6 +11,7 @@ uniform float u_red;
 uniform float u_green;
 uniform float u_blue;
 uniform sampler2D u_image_1;
+uniform sampler2D u_image_2;
 uniform sampler2D u_displacement;
 
 varying vec2 v_texcoord;
@@ -65,7 +66,7 @@ void main()
   float gravityStrength = 1.0;
 
   vec4 img_1 = texture2D(u_image_1, coords);
-  vec4 img_2 = texture2D(u_image_1, coords);
+  vec4 img_2 = texture2D(u_image_2, coords);
   vec4 displacement = texture2D(u_displacement, coords);
 
   float displaceForce1 = displacement.r * u_offset * displacementCoef * (1.0 + gravityStrength * g);
@@ -81,10 +82,10 @@ void main()
   float b1 = texture2D(u_image_1, vec2(uvDisplaced1.x - 0.08 * u_blue, uvDisplaced1.y + 0.15 * u_blue)).b;
   d_img_1 = vec4(r1, g1, b1, 1.0);
 
-  vec4 d_img_2 = texture2D(u_image_1, uvDisplaced2);
-  float r2 = texture2D(u_image_1, vec2(uvDisplaced2.x, uvDisplaced2.y - 0.1 * u_red)).r;
-  float g2 = texture2D(u_image_1, vec2(uvDisplaced2.x + 0.08 * u_red, uvDisplaced2.y - 0.05 * u_green)).g;
-  float b2 = texture2D(u_image_1, vec2(uvDisplaced2.x, uvDisplaced2.y - 0.1 * u_blue)).b;
+  vec4 d_img_2 = texture2D(u_image_2, uvDisplaced2);
+  float r2 = texture2D(u_image_2, vec2(uvDisplaced2.x, uvDisplaced2.y - 0.1 * u_red)).r;
+  float g2 = texture2D(u_image_2, vec2(uvDisplaced2.x, uvDisplaced2.y - 0.05 * u_green)).g;
+  float b2 = texture2D(u_image_2, vec2(uvDisplaced2.x + 0.08 * u_red, uvDisplaced2.y - 0.1 * u_blue)).b;
   d_img_2 = vec4(r2, g2, b2, 1.0);
 
   vec4 img = (d_img_1 * (1.0 - u_offset) + d_img_2 * u_offset);
