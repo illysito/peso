@@ -2,9 +2,11 @@ import gsap from 'gsap'
 import * as THREE from 'three'
 
 import frag from './fragmentShader'
+import main_frag from './mainFragmentShader'
 import vert from './vertexShader'
 
 const canvas = document.getElementById('three-canvas')
+const navLink = document.querySelector('.nav-link')
 const wrapper = document.querySelector('.canvas')
 const dpr = Math.min(window.devicePixelRatio || 1, 2)
 
@@ -44,10 +46,6 @@ export default class World {
       ...document.querySelectorAll('.content-img-wrapper'),
     ]
 
-    // scroll
-    this.scrollY = window.lenis?.scroll ?? window.scrollY
-    // console.log('first scroll value:', this.scrollY)
-
     // renderer
     this.renderer = new THREE.WebGLRenderer({
       canvas: canvas,
@@ -65,31 +63,119 @@ export default class World {
   async init() {
     // await this.loadTextures()
     await this.addImages()
+    await this.addPlane()
     this.setupListeners()
     this.setImagePositions()
     // this.addObjects()
     this.render()
+    this.resize()
     this.gsap()
   }
 
   setupListeners() {
     window.addEventListener('resize', this.resize.bind(this))
-    const lenis = window.lenis
-    lenis.on('scroll', ({ scroll }) => {
-      this.scrollY = scroll
-    })
   }
 
   resize() {
     this.w = wrapper.clientWidth
     this.h = wrapper.clientHeight
-    this.renderer.setSize(this.w, this.h)
     this.renderer.setPixelRatio(dpr)
+    const pr = this.renderer.getPixelRatio()
+
+    // update canvas resolutions (only need it for the big one, the others are always squares)
+    if (this.mainMesh) {
+      this.mainMesh.material.uniforms.u_resolution.value.set(
+        this.w * pr,
+        this.h * pr
+      )
+      this.mainMesh.scale.set(this.w, this.h, 1)
+    }
+
+    if (this.imageStore) {
+      this.imageStore.forEach((item) => {
+        const rect = item.img.getBoundingClientRect()
+
+        item.mesh.scale.set(rect.width, rect.height, 1)
+      })
+    }
+
+    this.renderer.setSize(this.w, this.h)
     this.camera.aspect = this.w / this.h
     this.updateCamera()
     this.camera.updateProjectionMatrix()
   }
 
+  render() {
+    this.time += 0.5
+
+    // FPS
+    this.frameCount++
+    const now = performance.now()
+    if (now - this.lastTime >= 1000) {
+      console.log('FPS:', this.frameCount)
+      this.frameCount = 0
+      this.lastTime = now
+    }
+
+    // time for main canvas
+    this.mainMesh.material.uniforms.u_time.value = 0.02 * this.time
+
+    // time for image canvas
+    if (this.imageStore) {
+      this.imageStore.forEach((img) => {
+        img.mesh.material.uniforms.u_time.value = 0.002 * this.time
+      })
+    }
+    this.setImagePositions()
+
+    // render & loop
+    this.renderer.render(this.scene, this.camera)
+    requestAnimationFrame(this.render.bind(this))
+  }
+
+  updateCamera() {
+    this.fov =
+      (2 * Math.atan(window.innerHeight / 2 / this.camera.position.z) * 180) /
+      Math.PI
+    this.camera.fov = this.fov
+    // console.log(this.camera.fov)
+  }
+
+  // main plane
+  async loadMainTextures() {
+    const loader = new THREE.TextureLoader()
+    const perlin = await loader.loadAsync(
+      githubToJsDelivr(
+        'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/perlinSquare.jpg'
+      )
+    )
+
+    return perlin
+  }
+
+  async addPlane() {
+    const perlin = await this.loadMainTextures()
+    // create a mesh for each image
+    // let mainGeometry = new THREE.PlaneGeometry(this.w, this.h, 1, 1)
+    let mainGeometry = new THREE.PlaneGeometry(1, 1, 1, 1)
+    let mainMaterial = new THREE.ShaderMaterial({
+      fragmentShader: main_frag,
+      vertexShader: vert,
+      uniforms: {
+        u_time: { value: 0 },
+        u_resolution: { value: new THREE.Vector2(this.w, this.h) },
+        u_offset: { value: 0 },
+        u_displacement: { value: perlin },
+      },
+    })
+    mainMaterial.transparent = true
+    mainMaterial.depthWrite = false
+    this.mainMesh = new THREE.Mesh(mainGeometry, mainMaterial)
+
+    this.scene.add(this.mainMesh)
+  }
+
+  // images
   async loadTextures() {
     const loader = new THREE.TextureLoader()
     const perlin = await loader.loadAsync(
@@ -173,45 +259,14 @@ export default class World {
     return { perlin, texturesFront, texturesBack }
   }
 
-  render() {
-    this.time += 0.5
-    this.frameCount++
-
-    const now = performance.now()
-    if (now - this.lastTime >= 1000) {
-      console.log('FPS:', this.frameCount)
-      this.frameCount = 0
-      this.lastTime = now
-    }
-
-    // animate here
-    if (this.imageStore) {
-      this.imageStore.forEach((img) => {
-        img.mesh.material.uniforms.u_time.value = 0.002 * this.time
-      })
-    }
-    this.setImagePositions()
-
-    // render & loop
-    this.renderer.render(this.scene, this.camera)
-    requestAnimationFrame(this.render.bind(this))
-  }
-
-  updateCamera() {
-    this.fov =
-      (2 * Math.atan(window.innerHeight / 2 / this.camera.position.z) * 180) /
-      Math.PI
-    this.camera.fov = this.fov
-    // console.log(this.camera.fov)
-  }
-
   async addImages() {
     const { perlin, texturesFront, texturesBack } = await this.loadTextures()
     this.imageStore = this.domImageWrappers.map((img, index) => {
       let bounds = img.getBoundingClientRect()
 
       // create a mesh for each image
-      let geometry = new THREE.PlaneGeometry(bounds.width, bounds.height, 1, 1)
+      // let geometry = new THREE.PlaneGeometry(bounds.width, bounds.height, 1, 1)
+      let geometry = new THREE.PlaneGeometry(1, 1, 1, 1)
       let material = new THREE.ShaderMaterial({
         fragmentShader: frag,
         vertexShader: vert,
@@ -391,6 +446,21 @@ export default class World {
             },
             '<0'
           )
+      })
+    })
+
+    navLink.addEventListener('mouseenter', () => {
+      gsap.to(this.mainMesh.material.uniforms.u_offset, {
+        value: 1,
+        duration: 1.4 * dur,
+        ease: 'power2.inOut',
+      })
+    })
+    navLink.addEventListener('mouseleave', () => {
+      gsap.to(this.mainMesh.material.uniforms.u_offset, {
+        value: 0,
+        duration: 1.4 * dur,
+        ease: 'power2.inOut',
       })
     })
   }
