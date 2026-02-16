@@ -138,7 +138,7 @@ export default class World {
       // galdar en danza
       loader.loadAsync(
         githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/0b321199ab67aa71ec8601bcf7461aa1525e9cee/imgs/GaldarEnDanza_2.webp'
+          'https://github.com/illysito/peso/blob/53ea88445a66cd11da545f987ef8fc53a0d330c3/imgs/GaldarEnDanza_2.webp'
         )
       ),
       loader.loadAsync(
@@ -154,7 +154,7 @@ export default class World {
       // david y goliat
       loader.loadAsync(
         githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/50ee2d7fce62b024aae7b230bd6a5b4fe273f24b/imgs/DavidGoliat_2.webp'
+          'https://github.com/illysito/peso/blob/53ea88445a66cd11da545f987ef8fc53a0d330c3/imgs/DavidGoliat_2.webp'
         )
       ),
       // azahar
