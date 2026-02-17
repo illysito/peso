@@ -24,6 +24,8 @@ export default class WorldHome {
     this.frameCount = 0
 
     this.time = 0
+    this.isScrolling = false
+    this.isResizing = false
 
     // sizes
     this.w = canvas.clientWidth
@@ -77,7 +79,34 @@ export default class WorldHome {
   }
 
   setupListeners() {
-    window.addEventListener('resize', this.resize.bind(this))
+    let scrollTimeout
+    let resizeTimeout
+    // window.addEventListener('resize', this.resize.bind(this))
+    window.addEventListener('resize', () => {
+      this.resize()
+      this.isResizing = true
+
+      clearTimeout(resizeTimeout)
+
+      resizeTimeout = setTimeout(() => {
+        this.isResizing = false
+        // run heavy resize logic once
+      }, 100) // adjust if needed
+    })
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        this.isScrolling = true
+
+        clearTimeout(scrollTimeout)
+
+        scrollTimeout = setTimeout(() => {
+          this.isScrolling = false
+        }, 100) // 100ms after last scroll event = stopped
+      },
+      { passive: true }
+    )
   }
 
   resize() {
@@ -125,16 +154,15 @@ export default class WorldHome {
     }
 
     // time for main canvas
-    // this.mainMesh.material.uniforms.u_time.value = 0.02 * this.time
-
-    // time for image canvas
     if (this.imageStore) {
       this.imageStore.forEach((img) => {
         img.mesh.material.uniforms.u_time.value = 0.002 * this.time
       })
     }
-    this.setImagePositions()
-
+    // time for image canvas
+    if (this.isScrolling || this.isResizing) {
+      this.setImagePositions()
+    }
     // render & loop
     this.renderer.render(this.scene, this.camera)
     requestAnimationFrame(this.render.bind(this))
@@ -501,6 +529,7 @@ export default class WorldHome {
     const dur = 1.2
     links.forEach((link) => {
       link.addEventListener('click', (e) => {
+        this.linkClicked = true
         e.preventDefault()
         const href = e.currentTarget.href
         gsap.to(this.mainMesh.material.uniforms.u_offset, {
