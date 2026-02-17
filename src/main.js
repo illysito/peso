@@ -19,7 +19,7 @@ async function runHomeFunctions() {
   mousetrack()
 }
 
-async function runProjectFunctions() {
+async function runProjectsFunctions() {
   const { default: WorldProjects } = await import(
     './features/three/worldProjects'
   )
@@ -31,6 +31,19 @@ async function runProjectFunctions() {
   projects()
 }
 
+async function runProjectFunctions() {
+  const { default: WorldTransition } = await import(
+    './features/three/worldTransition'
+  )
+  const { default: projectGallery } = await import(
+    './features/pages/project/projectGallery'
+  )
+
+  new WorldTransition()
+  projectGallery()
+}
+
 runGeneralFunctions()
 if (document.body.classList.contains('body__home')) runHomeFunctions()
-if (document.body.classList.contains('body__projects')) runProjectFunctions()
+if (document.body.classList.contains('body__projects')) runProjectsFunctions()
+if (document.body.classList.contains('body__project')) runProjectFunctions()

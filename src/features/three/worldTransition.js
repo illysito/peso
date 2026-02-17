@@ -45,7 +45,7 @@ export default class WorldTransition {
     // renderer
     this.renderer = new THREE.WebGLRenderer({
       canvas: canvas,
-      antialias: true,
+      // antialias: true,
       alpha: true,
     })
     this.renderer.setSize(this.w, this.h)

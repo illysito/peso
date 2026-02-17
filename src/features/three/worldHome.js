@@ -53,7 +53,7 @@ export default class WorldHome {
     // renderer
     this.renderer = new THREE.WebGLRenderer({
       canvas: canvas,
-      antialias: true,
+      // antialias: true,
       alpha: true,
     })
     this.renderer.setSize(this.w, this.h)
@@ -357,6 +357,7 @@ export default class WorldHome {
         left: bounds.left,
         width: bounds.width,
         height: bounds.height,
+        isVisible: true,
       }
     })
 
@@ -532,28 +533,28 @@ export default class WorldHome {
 
   // transitions
   fadeIn() {
-    const dur = 1.2
+    const dur = 0.9
     gsap.set(transitionOverlay, {
       zIndex: -30,
     })
     gsap.to(this.mainMesh.material.uniforms.u_offset, {
-      delay: 0.8,
+      delay: 0.6,
       value: 0,
       duration: 1.4 * dur,
       // ease: 'power2.inOut',
-      ease: 'power3.inOut',
+      ease: 'power3.in',
     })
     gsap.to(nav, {
-      delay: 0.8,
+      delay: 0.6,
       opacity: 1,
       duration: 1.4 * dur,
       // ease: 'power2.inOut',
-      ease: 'power1.inOut',
+      ease: 'power2.in',
     })
   }
 
   fadeOut() {
-    const dur = 1.2
+    const dur = 0.9
     links.forEach((link) => {
       link.addEventListener('click', (e) => {
         this.linkClicked = true
@@ -563,13 +564,13 @@ export default class WorldHome {
           value: 1,
           duration: 1.4 * dur,
           // ease: 'power2.inOut',
-          ease: 'power3.inOut',
+          ease: 'power3.out',
         })
         gsap.to(nav, {
           opacity: 0,
           duration: 1.4 * dur,
           // ease: 'power2.inOut',
-          ease: 'power1.inOut',
+          ease: 'power2.out',
           onComplete: () => {
             window.location.href = href
           },
