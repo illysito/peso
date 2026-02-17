@@ -7,6 +7,8 @@ gsap.registerPlugin(ScrollTrigger)
 function nav() {
   const heroSection = document.querySelector('.hero__section')
   const heroHeading = document.querySelector('.logo-h')
+  const navLinks = document.querySelectorAll('.nav-link-wrapper')
+  const logo = document.querySelector('.logo-h')
 
   // split hero heading
   const split = new SplitType(heroHeading, {
@@ -27,16 +29,34 @@ function nav() {
     })
   })
 
-  // scale down on scroll
-  // gsap.to(heroHeading, {
-  //   scale: 0.5,
-  //   scrollTrigger: {
-  //     trigger: heroSection,
-  //     start: 'top top',
-  //     end: 'bottom top',
-  //     scrub: true,
-  //   },
-  // })
+  // hover on links
+  navLinks.forEach((link) => {
+    const txt = link.firstElementChild
+    gsap.set(txt, {
+      fontVariationSettings: `"wght" ${300}`,
+    })
+    link.addEventListener('mouseenter', () => {
+      gsap.to(txt, {
+        fontVariationSettings: `"wght" ${500}`,
+      })
+    })
+    link.addEventListener('mouseleave', () => {
+      gsap.to(txt, {
+        fontVariationSettings: `"wght" ${300}`,
+      })
+    })
+  })
+
+  logo.addEventListener('mouseenter', () => {
+    gsap.to(logo, {
+      scale: 0.96,
+    })
+  })
+  logo.addEventListener('mouseleave', () => {
+    gsap.to(logo, {
+      scale: 1,
+    })
+  })
 
   // change weight on mousemove
   let mouseX = 0

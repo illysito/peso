@@ -61,7 +61,7 @@ void main()
   float displacementCoef = 0.4;
 
   // gravity
-  float g = 1.0 - uv.y;
+  float g = 1.0 - coords.y;
   g = pow(g, 2.0);    
   float gravityStrength = 1.0;
 
@@ -70,10 +70,10 @@ void main()
   vec4 displacement = texture2D(u_displacement, coords);
 
   float displaceForce1 = displacement.r * u_offset * displacementCoef * (1.0 + gravityStrength * g);
-  vec2 uvDisplaced1 = vec2(uv.x, uv.y + displaceForce1);
+  vec2 uvDisplaced1 = vec2(coords.x, coords.y + displaceForce1);
 
   float displaceForce2 = displacement.r * (1.0 - u_offset) * displacementCoef * (1.0 + gravityStrength * g);
-  vec2 uvDisplaced2 = vec2(uv.x, uv.y - displaceForce2);
+  vec2 uvDisplaced2 = vec2(coords.x, coords.y - displaceForce2);
 
   // displacement + color split
   vec4 d_img_1 = texture2D(u_image_1, uvDisplaced1);

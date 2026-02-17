@@ -1,12 +1,17 @@
 import gsap from 'gsap'
 import * as THREE from 'three'
 
-import frag from './fragmentShader'
-import main_frag from './mainFragmentShader'
-import vert from './vertexShader'
+import frag from './shaders/homeFrag'
+import transition_frag from './shaders/transitionFrag'
+import vert from './shaders/vertexShader'
 
 const canvas = document.getElementById('three-canvas')
-const navLink = document.querySelector('.nav-link')
+const nav = document.querySelector('.nav__section')
+const transitionOverlay = document.querySelector('.transition-overlay')
+const projectCards = document.querySelectorAll('.project-card')
+// const navLinks = document.querySelectorAll('.nav-link-wrapper')
+// const contentLinks = document.querySelectorAll('.content-link')
+const links = document.querySelectorAll('a')
 const wrapper = document.querySelector('.canvas')
 const dpr = Math.min(window.devicePixelRatio || 1, 2)
 
@@ -16,7 +21,7 @@ function githubToJsDelivr(permalink) {
     .replace('/blob/', '@')
 }
 
-export default class World {
+export default class WorldProjects {
   constructor() {
     this.lastTime = performance.now()
     this.frameCount = 0
@@ -43,7 +48,7 @@ export default class World {
 
     // images
     this.domImageWrappers = [
-      ...document.querySelectorAll('.content-img-wrapper'),
+      ...document.querySelectorAll('.project-img-wrapper'),
     ]
 
     // renderer
@@ -70,6 +75,8 @@ export default class World {
     this.render()
     this.resize()
     this.gsap()
+    this.fadeIn()
+    this.fadeOut()
   }
 
   setupListeners() {
@@ -94,7 +101,11 @@ export default class World {
     if (this.imageStore) {
       this.imageStore.forEach((item) => {
         const rect = item.img.getBoundingClientRect()
-
+        console.log(rect.width, rect.height)
+        item.mesh.material.uniforms.u_resolution.value.set(
+          rect.width * pr,
+          rect.height * pr
+        )
         item.mesh.scale.set(rect.width, rect.height, 1)
       })
     }
@@ -118,7 +129,7 @@ export default class World {
     }
 
     // time for main canvas
-    this.mainMesh.material.uniforms.u_time.value = 0.02 * this.time
+    // this.mainMesh.material.uniforms.u_time.value = 0.02 * this.time
 
     // time for image canvas
     if (this.imageStore) {
@@ -159,12 +170,12 @@ export default class World {
     // let mainGeometry = new THREE.PlaneGeometry(this.w, this.h, 1, 1)
     let mainGeometry = new THREE.PlaneGeometry(1, 1, 1, 1)
     let mainMaterial = new THREE.ShaderMaterial({
-      fragmentShader: main_frag,
+      fragmentShader: transition_frag,
       vertexShader: vert,
       uniforms: {
         u_time: { value: 0 },
         u_resolution: { value: new THREE.Vector2(this.w, this.h) },
-        u_offset: { value: 0 },
+        u_offset: { value: 1 },
         u_displacement: { value: perlin },
       },
     })
@@ -272,7 +283,9 @@ export default class World {
         vertexShader: vert,
         uniforms: {
           u_time: { value: 0 },
-          u_resolution: { value: new THREE.Vector2(1, 1) },
+          u_resolution: {
+            value: new THREE.Vector2(bounds.width, bounds.height),
+          },
           u_offset: { value: 0 },
           u_red: { value: 0 },
           u_green: { value: 0 },
@@ -315,7 +328,7 @@ export default class World {
     const dur = 1.2
     const offsetColors = [0.0, 0.0, 0.0]
 
-    this.domImageWrappers.forEach((img, index) => {
+    projectCards.forEach((img, index) => {
       img.addEventListener('mouseenter', () => {
         const randomIndex = Math.floor(Math.random() * offsetColors.length)
         const randomOffset = 0.02 + Math.random() * 0.08
@@ -449,18 +462,65 @@ export default class World {
       })
     })
 
-    navLink.addEventListener('mouseenter', () => {
-      gsap.to(this.mainMesh.material.uniforms.u_offset, {
-        value: 1,
-        duration: 1.4 * dur,
-        ease: 'power2.inOut',
-      })
+    // navLink.addEventListener('mouseenter', () => {
+    //   gsap.to(this.mainMesh.material.uniforms.u_offset, {
+    //     value: 1,
+    //     duration: 1.4 * dur,
+    //     ease: 'power2.inOut',
+    //   })
+    // })
+    // navLink.addEventListener('mouseleave', () => {
+    //   gsap.to(this.mainMesh.material.uniforms.u_offset, {
+    //     value: 0,
+    //     duration: 1.4 * dur,
+    //     ease: 'power2.inOut',
+    //   })
+    // })
+  }
+
+  // transitions
+  fadeIn() {
+    const dur = 1.2
+    gsap.set(transitionOverlay, {
+      zIndex: -30,
     })
-    navLink.addEventListener('mouseleave', () => {
-      gsap.to(this.mainMesh.material.uniforms.u_offset, {
-        value: 0,
-        duration: 1.4 * dur,
-        ease: 'power2.inOut',
+    gsap.to(this.mainMesh.material.uniforms.u_offset, {
+      delay: 0.8,
+      value: 0,
+      duration: 1.4 * dur,
+      // ease: 'power2.inOut',
+      ease: 'power1.inOut',
+    })
+    gsap.to(nav, {
+      delay: 0.8,
+      opacity: 1,
+      duration: 1.4 * dur,
+      // ease: 'power2.inOut',
+      ease: 'power1.inOut',
+    })
+  }
+
+  fadeOut() {
+    const dur = 1.2
+    links.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault()
+        const href = e.currentTarget.href
+        gsap.to(this.mainMesh.material.uniforms.u_offset, {
+          value: 1,
+          duration: 1.4 * dur,
+          // ease: 'power2.inOut',
+          ease: 'power1.inOut',
+        })
+        gsap.to(nav, {
+          opacity: 0,
+          duration: 1.4 * dur,
+          // ease: 'power2.inOut',
+          ease: 'power1.inOut',
+          onComplete: () => {
+            window.location.href = href
+          },
+        })
       })
     })
   }
