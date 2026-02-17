@@ -22,7 +22,7 @@ function projects() {
   })
 
   projectCards.forEach((w) => {
-    console.log('yeka')
+    // console.log('yeka')
     const desc = w.lastElementChild
     const title = desc.previousElementSibling
     w.addEventListener('mouseenter', () => {

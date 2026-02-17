@@ -27,6 +27,8 @@ export default class WorldProjects {
     this.frameCount = 0
 
     this.time = 0
+    this.isScrolling = false
+    this.isResizing = false
 
     // sizes
     this.w = canvas.clientWidth
@@ -69,6 +71,7 @@ export default class WorldProjects {
     // await this.loadTextures()
     await this.addImages()
     await this.addPlane()
+    this.setupObserver()
     this.setupListeners()
     this.setImagePositions()
     // this.addObjects()
@@ -79,8 +82,60 @@ export default class WorldProjects {
     this.fadeOut()
   }
 
+  setupObserver() {
+    this.io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const item = entry.target.__threeItem
+          item.isVisible = entry.isIntersecting
+          item.mesh.visible = entry.isIntersecting
+
+          // optional: if it just became visible, you can force a one-time rect update
+          if (entry.isIntersecting) item.needsRect = true
+        }
+      },
+      {
+        root: null,
+        rootMargin: '20px', // pre-activate before it appears
+        threshold: 0,
+      }
+    )
+
+    this.imageStore.forEach((item) => {
+      item.img.__threeItem = item
+      this.io.observe(item.img)
+    })
+  }
+
   setupListeners() {
-    window.addEventListener('resize', this.resize.bind(this))
+    let scrollTimeout
+    let resizeTimeout
+    // window.addEventListener('resize', this.resize.bind(this))
+    window.addEventListener('resize', () => {
+      this.resize()
+      this.isResizing = true
+
+      clearTimeout(resizeTimeout)
+
+      resizeTimeout = setTimeout(() => {
+        this.isResizing = false
+        // run heavy resize logic once
+      }, 100) // adjust if needed
+    })
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        this.isScrolling = true
+
+        clearTimeout(scrollTimeout)
+
+        scrollTimeout = setTimeout(() => {
+          this.isScrolling = false
+        }, 100) // 100ms after last scroll event = stopped
+      },
+      { passive: true }
+    )
   }
 
   resize() {
@@ -101,7 +156,7 @@ export default class WorldProjects {
     if (this.imageStore) {
       this.imageStore.forEach((item) => {
         const rect = item.img.getBoundingClientRect()
-        console.log(rect.width, rect.height)
+        // console.log(rect.width, rect.height)
         item.mesh.material.uniforms.u_resolution.value.set(
           rect.width * pr,
           rect.height * pr
@@ -137,7 +192,9 @@ export default class WorldProjects {
         img.mesh.material.uniforms.u_time.value = 0.002 * this.time
       })
     }
-    this.setImagePositions()
+    if (this.isScrolling || this.isResizing) {
+      this.setImagePositions()
+    }
 
     // render & loop
     this.renderer.render(this.scene, this.camera)
@@ -306,6 +363,7 @@ export default class WorldProjects {
         left: bounds.left,
         width: bounds.width,
         height: bounds.height,
+        isVisible: false,
       }
     })
 
@@ -316,6 +374,7 @@ export default class WorldProjects {
   setImagePositions() {
     // console.log(this.imageStore)
     this.imageStore.forEach((item) => {
+      if (!item.isVisible) return
       const rect = item.img.getBoundingClientRect()
 
       item.mesh.position.x = rect.left - this.w / 2 + rect.width / 2 // operating with img width and screen width shift coord system from DOM to three.js

@@ -68,6 +68,7 @@ export default class WorldHome {
     // await this.loadTextures()
     await this.addImages()
     await this.addPlane()
+    this.setupObserver()
     this.setupListeners()
     this.setImagePositions()
     // this.addObjects()
@@ -76,6 +77,31 @@ export default class WorldHome {
     this.gsap()
     this.fadeIn()
     this.fadeOut()
+  }
+
+  setupObserver() {
+    this.io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const item = entry.target.__threeItem
+          item.isVisible = entry.isIntersecting
+          item.mesh.visible = entry.isIntersecting
+
+          // optional: if it just became visible, you can force a one-time rect update
+          if (entry.isIntersecting) item.needsRect = true
+        }
+      },
+      {
+        root: null,
+        rootMargin: '20px', // pre-activate before it appears
+        threshold: 0,
+      }
+    )
+
+    this.imageStore.forEach((item) => {
+      item.img.__threeItem = item
+      this.io.observe(item.img)
+    })
   }
 
   setupListeners() {
@@ -341,6 +367,7 @@ export default class WorldHome {
   setImagePositions() {
     // console.log(this.imageStore)
     this.imageStore.forEach((item) => {
+      if (!item.isVisible) return
       const rect = item.img.getBoundingClientRect()
 
       item.mesh.position.x = rect.left - this.w / 2 + rect.width / 2 // operating with img width and screen width shift coord system from DOM to three.js

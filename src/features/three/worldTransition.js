@@ -91,19 +91,6 @@ export default class WorldTransition {
   }
 
   render() {
-    // this.time += 0.5
-
-    // FPS
-    // this.frameCount++
-    // const now = performance.now()
-    // if (now - this.lastTime >= 1000) {
-    //   console.log('FPS:', this.frameCount)
-    //   this.frameCount = 0
-    //   this.lastTime = now
-    // }
-
-    // time for main canvas
-
     // render & loop
     this.renderer.render(this.scene, this.camera)
     requestAnimationFrame(this.render.bind(this))
