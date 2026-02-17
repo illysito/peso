@@ -7,7 +7,7 @@ function runGeneralFunctions() {
   nav()
 }
 
-function runHomeFunctions() {
+async function runHomeFunctions() {
   const { default: WorldHome } = await import('./features/three/worldHome')
   const { default: content } = await import('./features/pages/home/content')
   const { default: mousetrack } = await import(
@@ -19,7 +19,7 @@ function runHomeFunctions() {
   mousetrack()
 }
 
-function runProjectFunctions() {
+async function runProjectFunctions() {
   const { default: WorldProjects } = await import(
     './features/three/worldProjects'
   )
