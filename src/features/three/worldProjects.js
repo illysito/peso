@@ -11,6 +11,7 @@ const transitionOverlay = document.querySelector('.transition-overlay')
 const projectCards = document.querySelectorAll('.project-card')
 // const navLinks = document.querySelectorAll('.nav-link-wrapper')
 // const contentLinks = document.querySelectorAll('.content-link')
+const bodyWrapper = document.querySelector('.body__wrapper')
 const links = document.querySelectorAll('a')
 const wrapper = document.querySelector('.canvas')
 const dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -570,6 +571,11 @@ export default class WorldProjects {
           duration: 1.4 * dur,
           // ease: 'power2.inOut',
           ease: 'power2.out',
+        })
+        gsap.to(bodyWrapper, {
+          y: 8,
+          duration: 0.8,
+          // ease: 'power2.inOut',
         })
         gsap.to(nav, {
           opacity: 0,

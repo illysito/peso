@@ -43,7 +43,18 @@ async function runProjectFunctions() {
   projectGallery()
 }
 
+async function runAgendaFunctions() {
+  const { default: agenda } = await import('./features/pages/agenda/agenda')
+  const { default: WorldTransition } = await import(
+    './features/three/worldTransition'
+  )
+
+  new WorldTransition()
+  agenda()
+}
+
 runGeneralFunctions()
 if (document.body.classList.contains('body__home')) runHomeFunctions()
 if (document.body.classList.contains('body__projects')) runProjectsFunctions()
 if (document.body.classList.contains('body__project')) runProjectFunctions()
+if (document.body.classList.contains('body__agenda')) runAgendaFunctions()

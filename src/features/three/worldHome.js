@@ -8,8 +8,10 @@ import vert from './shaders/vertexShader'
 const canvas = document.getElementById('three-canvas')
 const nav = document.querySelector('.nav__section')
 const transitionOverlay = document.querySelector('.transition-overlay')
+const bodyWrapper = document.querySelector('.body__wrapper')
 const links = document.querySelectorAll('a')
 const wrapper = document.querySelector('.canvas')
+const mousetrack = document.querySelector('.mousetrack-container')
 const dpr = Math.min(window.devicePixelRatio || 1, 2)
 
 function githubToJsDelivr(permalink) {
@@ -566,6 +568,11 @@ export default class WorldHome {
           // ease: 'power2.inOut',
           ease: 'power3.out',
         })
+        gsap.to(bodyWrapper, {
+          y: 8,
+          duration: 0.8,
+          // ease: 'power2.inOut',
+        })
         gsap.to(nav, {
           opacity: 0,
           duration: 1.4 * dur,
@@ -574,6 +581,12 @@ export default class WorldHome {
           onComplete: () => {
             window.location.href = href
           },
+        })
+        gsap.to(mousetrack, {
+          opacity: 0,
+          duration: 1.4 * dur,
+          // ease: 'power2.inOut',
+          ease: 'power2.out',
         })
       })
     })

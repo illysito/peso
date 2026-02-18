@@ -9,6 +9,7 @@ const nav = document.querySelector('.nav__section')
 const transitionOverlay = document.querySelector('.transition-overlay')
 const navLinks = document.querySelectorAll('.nav-link-wrapper')
 const wrapper = document.querySelector('.canvas')
+const bodyWrapper = document.querySelector('.body__wrapper')
 const dpr = Math.min(window.devicePixelRatio || 1, 2)
 
 function githubToJsDelivr(permalink) {
@@ -91,6 +92,13 @@ export default class WorldTransition {
   }
 
   render() {
+    this.frameCount++
+    const now = performance.now()
+    if (now - this.lastTime >= 1000) {
+      console.log('FPS:', this.frameCount)
+      this.frameCount = 0
+      this.lastTime = now
+    }
     // render & loop
     this.renderer.render(this.scene, this.camera)
     requestAnimationFrame(this.render.bind(this))
@@ -171,6 +179,11 @@ export default class WorldTransition {
           duration: 1.4 * dur,
           // ease: 'power2.inOut',
           ease: 'power1.inOut',
+        })
+        gsap.to(bodyWrapper, {
+          y: 8,
+          duration: 0.8,
+          // ease: 'power2.inOut',
         })
         gsap.to(nav, {
           opacity: 0,

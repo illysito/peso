@@ -4,9 +4,15 @@ import SplitType from 'split-type'
 
 // gsap.registerPlugin(ScrollTrigger)
 
-function randomChar(input) {
+function randomChar(input, proportion, duration) {
   // const input = document.querySelector('.content-h')
 
+  if (!proportion) {
+    proportion = 0.5
+  }
+  if (!duration) {
+    duration = 18
+  }
   // split hero heading
   const split = new SplitType(input, {
     type: 'chars',
@@ -46,7 +52,7 @@ function randomChar(input) {
   let charCounter = 0
   const selectedChars = []
   for (const char of split.chars) {
-    if (charCounter >= split.chars.length / 2) break
+    if (charCounter >= split.chars.length * proportion) break
 
     const isValid = /^[a-zñ]$/.test(char.textContent)
 
@@ -83,7 +89,7 @@ function randomChar(input) {
           }
         )
 
-        if (i > 18 + randomOffset) {
+        if (i > duration + randomOffset) {
           // control duration by iteration count
           char.textContent = targetChar
           return
