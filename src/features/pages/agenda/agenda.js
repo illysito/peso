@@ -3,15 +3,28 @@ import gsap from 'gsap'
 
 // gsap.registerPlugin(ScrollTrigger)
 
-import randomChar from '../../functions/randomChar'
+// import randomChar from '../../functions/randomChar'
 // import revealLines from '../../functions/revealLines'
 
 function agenda() {
   const agendaContainer = document.querySelector('.agendas-container')
-  const agendaRows = document.querySelectorAll('.agenda-row')
+  // const agendaRows = document.querySelectorAll('.agenda-row')
   const yearHeadings = [...document.querySelectorAll('.agenda-heading')]
   const agendaWrappers = [
     ...document.querySelectorAll('.agenda-content-wrapper'),
+  ]
+
+  const backgroundColors = [
+    '#fffde6', // 2026
+    '#fffde3', // 2026
+    '#fffddf', // 2025
+    '#fffcdc', // 2024
+    '#fffcd9', // 2023
+    '#fffcd5', // 2022
+    '#fffbd2', // 2021
+    '#fffbce', // 2020
+    '#fffbcb', // 2019
+    '#fffbc8', // 2018
   ]
 
   // set initial year styles to avoid bumps
@@ -19,7 +32,7 @@ function agenda() {
     if (i === 0) {
       gsap.set(h, {
         opacity: 1,
-        y: 2,
+        y: 8,
         fontSize: '6em',
       })
     } else {
@@ -32,21 +45,27 @@ function agenda() {
   })
 
   // randomChar for rows
-  agendaRows.forEach((row) => {
-    const wrapper = row.firstElementChild
-    const title = wrapper.firstElementChild
-    row.addEventListener('mouseenter', () => {
-      randomChar(title, 0.2, 18)
-    })
-  })
+  // agendaRows.forEach((row) => {
+  //   const wrapper = row.firstElementChild
+  //   const title = wrapper.firstElementChild
+  //   row.addEventListener('mouseenter', () => {
+  //     randomChar(title, 0.2, 18)
+  //   })
+  // })
 
   // year's interactions
   function animateClickedYears(currentIndex) {
+    gsap.to(document.body, {
+      backgroundColor: backgroundColors[currentIndex],
+      duration: 1.2,
+      ease: 'power1.inOut',
+      overwrite: 'auto',
+    })
     yearHeadings.forEach((h, index) => {
       if (index === currentIndex) {
         gsap.to(h, {
           opacity: 1,
-          y: 2,
+          y: 8,
           fontSize: '6em',
           duration: 0.8,
           ease: 'power3.inOut',

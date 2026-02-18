@@ -151,6 +151,7 @@ export default class WorldTransition {
     const dur = 1.2
     gsap.set(transitionOverlay, {
       zIndex: -30,
+      opacity: 0,
     })
     gsap.to(this.mainMesh.material.uniforms.u_offset, {
       delay: 0.8,

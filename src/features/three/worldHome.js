@@ -538,6 +538,7 @@ export default class WorldHome {
     const dur = 0.9
     gsap.set(transitionOverlay, {
       zIndex: -30,
+      opacity: 0,
     })
     gsap.to(this.mainMesh.material.uniforms.u_offset, {
       delay: 0.6,
