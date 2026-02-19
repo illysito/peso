@@ -28,7 +28,7 @@ function revealLines(input) {
     wrapper.appendChild(line)
 
     gsap.set(line, {
-      yPercent: 100,
+      yPercent: -100,
       opacity: 0,
     })
   })
@@ -39,6 +39,7 @@ function revealLines(input) {
       yPercent: 0,
       opacity: 1,
       duration: 0.8,
+      ease: 'power1.out',
       scrollTrigger: {
         trigger: l,
         start: 'top 96%',

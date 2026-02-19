@@ -1,10 +1,16 @@
 import './styles/style.css'
 
 // -- general
+import footer from './features/pages/general/footer'
 import nav from './features/pages/general/nav'
+
+const footerSection = document.querySelector('.footer__section')
 
 function runGeneralFunctions() {
   nav()
+  if (footerSection) {
+    footer()
+  }
 }
 
 async function runHomeFunctions() {
@@ -53,8 +59,21 @@ async function runAgendaFunctions() {
   agenda()
 }
 
+async function runAboutFunctions() {
+  const { default: about } = await import('./features/pages/about/about')
+  const { default: worldAbout } = await import('./features/three/worldAbout')
+  // const { default: WorldTransition } = await import(
+  //   './features/three/worldTransition'
+  // )
+
+  // new WorldTransition()
+  new worldAbout()
+  about()
+}
+
 runGeneralFunctions()
 if (document.body.classList.contains('body__home')) runHomeFunctions()
 if (document.body.classList.contains('body__projects')) runProjectsFunctions()
 if (document.body.classList.contains('body__project')) runProjectFunctions()
 if (document.body.classList.contains('body__agenda')) runAgendaFunctions()
+if (document.body.classList.contains('body__about')) runAboutFunctions()

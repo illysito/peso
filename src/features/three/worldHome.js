@@ -559,6 +559,7 @@ export default class WorldHome {
   fadeOut() {
     const dur = 0.9
     links.forEach((link) => {
+      if (link.classList.contains('is--out')) return
       link.addEventListener('click', (e) => {
         this.linkClicked = true
         e.preventDefault()

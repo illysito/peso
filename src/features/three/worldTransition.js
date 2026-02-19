@@ -172,6 +172,7 @@ export default class WorldTransition {
   fadeOut() {
     const dur = 1.2
     navLinks.forEach((link) => {
+      if (link.classList.contains('is--out')) return
       link.addEventListener('click', (e) => {
         e.preventDefault()
         const href = e.currentTarget.href

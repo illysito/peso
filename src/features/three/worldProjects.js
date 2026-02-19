@@ -564,6 +564,7 @@ export default class WorldProjects {
   fadeOut() {
     const dur = 1
     links.forEach((link) => {
+      if (link.classList.contains('is--out')) return
       link.addEventListener('click', (e) => {
         e.preventDefault()
         const href = e.currentTarget.href
