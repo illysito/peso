@@ -75,7 +75,7 @@ function agenda() {
           opacity: 0.2,
           y: 0,
           fontSize: '2em',
-          duration: 0.8,
+          duration: 0.82,
           ease: 'power3.inOut',
         })
       } // meaning if it's the clicked one
