@@ -9,6 +9,7 @@ function nav() {
   const heroHeading = document.querySelector('.logo-h')
   const navLinks = document.querySelectorAll('.nav-link-wrapper')
   const logo = document.querySelector('.logo-h')
+  const underscores = document.querySelectorAll('.underscore')
 
   // split hero heading
   const split = new SplitType(heroHeading, {
@@ -29,8 +30,50 @@ function nav() {
     })
   })
 
+  // set underscores
+  gsap.set(underscores, {
+    scaleX: 0,
+    transformOrigin: 'right center',
+  })
+  if (document.body.classList.contains('body__projects')) {
+    gsap.set(underscores[1], {
+      scaleX: 1,
+      transformOrigin: 'right center',
+    })
+  }
+  if (document.body.classList.contains('body__project')) {
+    gsap.set(underscores[1], {
+      scaleX: 1,
+      transformOrigin: 'right center',
+    })
+  }
+  if (document.body.classList.contains('body__catalogue')) {
+    gsap.set(underscores[2], {
+      scaleX: 1,
+      transformOrigin: 'right center',
+    })
+  }
+  if (document.body.classList.contains('body__agenda')) {
+    gsap.set(underscores[3], {
+      scaleX: 1,
+      transformOrigin: 'right center',
+    })
+  }
+  if (document.body.classList.contains('body__about')) {
+    gsap.set(underscores[4], {
+      scaleX: 1,
+      transformOrigin: 'right center',
+    })
+  }
+  if (document.body.classList.contains('body__contact')) {
+    gsap.set(underscores[5], {
+      scaleX: 1,
+      transformOrigin: 'right center',
+    })
+  }
+
   // hover on links
-  navLinks.forEach((link) => {
+  navLinks.forEach((link, index) => {
     const txt = link.firstElementChild
     gsap.set(txt, {
       fontVariationSettings: `"wght" ${300}`,
@@ -39,10 +82,22 @@ function nav() {
       gsap.to(txt, {
         fontVariationSettings: `"wght" ${500}`,
       })
+      gsap.to(underscores[index], {
+        duration: 0.4,
+        ease: 'power2.inOut',
+        scaleX: 1,
+        transformOrigin: 'left center',
+      })
     })
     link.addEventListener('mouseleave', () => {
       gsap.to(txt, {
         fontVariationSettings: `"wght" ${300}`,
+      })
+      gsap.to(underscores[index], {
+        duration: 0.4,
+        ease: 'power2.inOut',
+        scaleX: 0,
+        transformOrigin: 'right center',
       })
     })
   })

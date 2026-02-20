@@ -9,6 +9,7 @@ gsap.registerPlugin(ScrollTrigger)
 function footer() {
   const footerHeading = document.querySelector('.footer-h')
   const footerLinks = document.querySelectorAll('.footer-link-wrapper')
+  const illyLink = document.querySelector('.is--illy')
 
   // split footer heading
   const split = new SplitType(footerHeading, {
@@ -31,6 +32,17 @@ function footer() {
       gsap.to(txt, {
         fontVariationSettings: `"wght" ${300}`,
       })
+    })
+  })
+
+  illyLink.addEventListener('mouseenter', () => {
+    gsap.to(illyLink, {
+      fontVariationSettings: `"wght" ${800}`,
+    })
+  })
+  illyLink.addEventListener('mouseleave', () => {
+    gsap.to(illyLink, {
+      fontVariationSettings: `"wght" ${600}`,
     })
   })
 

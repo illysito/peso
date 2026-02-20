@@ -61,13 +61,13 @@ async function runAgendaFunctions() {
 
 async function runAboutFunctions() {
   const { default: about } = await import('./features/pages/about/about')
-  const { default: worldAbout } = await import('./features/three/worldAbout')
-  // const { default: WorldTransition } = await import(
-  //   './features/three/worldTransition'
-  // )
+  // const { default: worldAbout } = await import('./features/three/worldAbout')
+  const { default: WorldTransition } = await import(
+    './features/three/worldTransition'
+  )
 
-  // new WorldTransition()
-  new worldAbout()
+  new WorldTransition()
+  // new worldAbout()
   about()
 }
 
