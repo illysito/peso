@@ -19,8 +19,10 @@ async function runHomeFunctions() {
   const { default: mousetrack } = await import(
     './features/pages/home/mousetrack'
   )
+  const { default: claim } = await import('./features/pages/home/claim')
 
   new WorldHome()
+  claim()
   content()
   mousetrack()
 }
