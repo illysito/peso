@@ -7,6 +7,7 @@ import revealLines from '../../functions/revealLines'
 gsap.registerPlugin(ScrollTrigger)
 
 function footer() {
+  const footer = document.querySelector('.footer__section')
   const footerHeading = document.querySelector('.footer-h')
   const footerLinks = document.querySelectorAll('.footer-link-wrapper')
   const illyLink = document.querySelector('.is--illy')
@@ -17,6 +18,15 @@ function footer() {
   })
 
   // hover on links
+  gsap.from(footerHeading, {
+    opacity: 0,
+    duration: 0.8,
+    scrollTrigger: {
+      trigger: footerHeading,
+      start: 'top 98%',
+      end: 'top 80%',
+    },
+  })
   footerLinks.forEach((link) => {
     const txt = link.firstElementChild
     revealLines(txt)
@@ -48,142 +58,136 @@ function footer() {
 
   // change weight on mousemove
   let mouseX = 0
+  let currentX = 0
+  let ease = 0.08
+  function getInertiaX() {
+    currentX += (mouseX - currentX) * ease
+    return currentX
+  }
+
   const MIN_WEIGHT = 200
   const MIN_WEIGHT_MID = 300
   const MAX_WEIGHT_MID = 500
   const MAX_WEIGHT = 600
+  let rafId
+  let isActive = false
   function updateWeight() {
+    if (!isActive) return
+    const smoothX = getInertiaX()
     // p from peso and from producciones
     let pWeight = gsap.utils.mapRange(
       0,
       window.innerWidth,
       MAX_WEIGHT,
       MIN_WEIGHT,
-      mouseX
+      smoothX
     )
-    gsap.to(split.chars[0], {
-      fontVariationSettings: `"wght" ${pWeight}`,
-    })
-    gsap.to(split.chars[4], {
-      fontVariationSettings: `"wght" ${pWeight}`,
-    })
+    split.chars[0].style.fontVariationSettings = `"wght" ${pWeight}`
+    split.chars[4].style.fontVariationSettings = `"wght" ${pWeight}`
+
     // r from producciones
     let rWeight = gsap.utils.mapRange(
       0,
       window.innerWidth,
       MAX_WEIGHT - 25,
       MIN_WEIGHT + 25,
-      mouseX
+      smoothX
     )
-    gsap.to(split.chars[5], {
-      fontVariationSettings: `"wght" ${rWeight}`,
-    })
+    split.chars[5].style.fontVariationSettings = `"wght" ${rWeight}`
+
     // ..o..from producciones
     let ooWeight = gsap.utils.mapRange(
       0,
       window.innerWidth,
       MAX_WEIGHT - 50,
       MIN_WEIGHT + 50,
-      mouseX
+      smoothX
     )
-    gsap.to(split.chars[6], {
-      fontVariationSettings: `"wght" ${ooWeight}`,
-    })
+    split.chars[6].style.fontVariationSettings = `"wght" ${ooWeight}`
+
     // ..d..from producciones
     let dWeight = gsap.utils.mapRange(
       0,
       window.innerWidth,
       MAX_WEIGHT - 75,
       MIN_WEIGHT + 75,
-      mouseX
+      smoothX
     )
-    gsap.to(split.chars[7], {
-      fontVariationSettings: `"wght" ${dWeight}`,
-    })
+    split.chars[7].style.fontVariationSettings = `"wght" ${dWeight}`
+
     // e from peso and u from producciones
     let eWeight = gsap.utils.mapRange(
       0,
       window.innerWidth,
       MAX_WEIGHT_MID,
       MIN_WEIGHT_MID,
-      mouseX
+      smoothX
     )
-    gsap.to(split.chars[1], {
-      fontVariationSettings: `"wght" ${eWeight}`,
-    })
-    gsap.to(split.chars[8], {
-      fontVariationSettings: `"wght" ${eWeight}`,
-    })
+    split.chars[1].style.fontVariationSettings = `"wght" ${eWeight}`
+    split.chars[8].style.fontVariationSettings = `"wght" ${eWeight}`
+
     let c1Weight = gsap.utils.mapRange(
       0,
       window.innerWidth,
       MAX_WEIGHT_MID - 25,
       MIN_WEIGHT_MID + 25,
-      mouseX
+      smoothX
     )
-    gsap.to(split.chars[9], {
-      fontVariationSettings: `"wght" ${c1Weight}`,
-    })
+    split.chars[9].style.fontVariationSettings = `"wght" ${c1Weight}`
+
     let c2Weight = gsap.utils.mapRange(
       0,
       window.innerWidth,
       MAX_WEIGHT_MID - 50,
       MIN_WEIGHT_MID + 50,
-      mouseX
+      smoothX
     )
-    gsap.to(split.chars[10], {
-      fontVariationSettings: `"wght" ${c2Weight}`,
-    })
+    split.chars[10].style.fontVariationSettings = `"wght" ${c2Weight}`
+
     let iWeight = gsap.utils.mapRange(
       0,
       window.innerWidth,
       MAX_WEIGHT_MID - 75,
       MIN_WEIGHT_MID + 75,
-      mouseX
+      smoothX
     )
-    gsap.to(split.chars[11], {
-      fontVariationSettings: `"wght" ${iWeight}`,
-    })
+    split.chars[11].style.fontVariationSettings = `"wght" ${iWeight}`
+
     // s
     let sWeight = gsap.utils.mapRange(
       0,
       window.innerWidth,
       MIN_WEIGHT_MID,
       MAX_WEIGHT_MID,
-      mouseX
+      smoothX
     )
-    gsap.to(split.chars[2], {
-      fontVariationSettings: `"wght" ${sWeight}`,
-    })
-    gsap.to(split.chars[12], {
-      fontVariationSettings: `"wght" ${sWeight}`,
-    })
+    split.chars[2].style.fontVariationSettings = `"wght" ${sWeight}`
+    split.chars[12].style.fontVariationSettings = `"wght" ${sWeight}`
+
     let oooWeight = gsap.utils.mapRange(
       0,
       window.innerWidth,
-      MIN_WEIGHT + 25,
+      MIN_WEIGHT + 75,
       MAX_WEIGHT - 25,
-      mouseX
+      smoothX
     )
-    gsap.to(split.chars[13], {
-      fontVariationSettings: `"wght" ${oooWeight}`,
-    })
+    split.chars[13].style.fontVariationSettings = `"wght" ${oooWeight}`
+
     let nWeight = gsap.utils.mapRange(
       0,
       window.innerWidth,
       MIN_WEIGHT + 50,
       MAX_WEIGHT - 50,
-      mouseX
+      smoothX
     )
-    gsap.to(split.chars[14], {
-      fontVariationSettings: `"wght" ${nWeight}`,
-    })
+    split.chars[14].style.fontVariationSettings = `"wght" ${nWeight}`
+
     let eeWeight = gsap.utils.mapRange(
       0,
       window.innerWidth,
       MIN_WEIGHT + 75,
-      MAX_WEIGHT - 75,
-      mouseX
+      MAX_WEIGHT - 25,
+      smoothX
     )
     gsap.to(split.chars[15], {
       fontVariationSettings: `"wght" ${eeWeight}`,
@@ -194,22 +198,38 @@ function footer() {
       window.innerWidth,
       MIN_WEIGHT,
       MAX_WEIGHT,
-      mouseX
+      smoothX
     )
-    gsap.to(split.chars[3], {
-      fontVariationSettings: `"wght" ${oWeight}`,
-    })
-    gsap.to(split.chars[15], {
-      fontVariationSettings: `"wght" ${oWeight}`,
-    })
+    split.chars[3].style.fontVariationSettings = `"wght" ${oWeight}`
+    split.chars[15].style.fontVariationSettings = `"wght" ${oWeight}`
+
     // loop
-    requestAnimationFrame(updateWeight)
+    rafId = requestAnimationFrame(updateWeight)
   }
   updateWeight()
 
   window.addEventListener('mousemove', (e) => {
     mouseX = e.clientX
   })
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          isActive = true
+          updateWeight()
+        } else {
+          isActive = false
+          cancelAnimationFrame(rafId)
+        }
+      })
+    },
+    {
+      threshold: 0.2, // triggers when 20% of footer is visible
+    }
+  )
+
+  observer.observe(footer)
 }
 
 export default footer
