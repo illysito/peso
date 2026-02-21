@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import frag from './shaders/homeFrag'
 import transition_frag from './shaders/transitionFrag'
 import vert from './shaders/vertexShader'
+console.log(vert)
 
 const canvas = document.getElementById('three-canvas')
 const nav = document.querySelector('.nav__section')
