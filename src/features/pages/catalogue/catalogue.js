@@ -57,9 +57,11 @@ function catalogue() {
       gsap.to(img, {
         opacity: 1,
         duration: 0.2,
+        onComplete: () => {
+          video.pause()
+          video.currentTime = 0 // remove this line if you DON'T want reset
+        },
       })
-      video.pause()
-      // video.currentTime = 0 // remove this line if you DON'T want reset
     })
   })
 }
