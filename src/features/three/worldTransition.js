@@ -154,14 +154,14 @@ export default class WorldTransition {
       opacity: 0,
     })
     gsap.to(this.mainMesh.material.uniforms.u_offset, {
-      delay: 0.8,
+      delay: 0.2,
       value: 0,
       duration: 1.4 * dur,
       // ease: 'power2.inOut',
       ease: 'power1.inOut',
     })
     gsap.to(nav, {
-      delay: 0.8,
+      delay: 0.2,
       opacity: 1,
       duration: 1.4 * dur,
       // ease: 'power2.inOut',
