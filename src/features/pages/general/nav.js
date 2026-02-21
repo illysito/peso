@@ -100,6 +100,14 @@ function nav() {
         transformOrigin: 'right center',
       })
     })
+    link.addEventListener('click', () => {
+      gsap.to(underscores[index], {
+        duration: 0.4,
+        ease: 'power2.inOut',
+        scaleX: 0,
+        transformOrigin: 'right center',
+      })
+    })
   })
 
   logo.addEventListener('mouseenter', () => {
