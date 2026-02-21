@@ -84,6 +84,7 @@ export default class WorldHome {
       await this.addImages()
       this.setupObserver()
       this.setImagePositions()
+      this.resize()
     }, 600) // tweak: 300–1500ms depending on feel
   }
 
