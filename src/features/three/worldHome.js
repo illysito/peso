@@ -68,17 +68,23 @@ export default class WorldHome {
 
   async init() {
     // await this.loadTextures()
-    await this.addImages()
+    // await this.addImages()
     await this.addPlane()
-    this.setupObserver()
+    // this.setupObserver()
     this.setupListeners()
-    this.setImagePositions()
+    // this.setImagePositions()
     // this.addObjects()
     this.render()
     this.resize()
     this.gsap()
     this.fadeIn()
     this.fadeOut()
+
+    setTimeout(async () => {
+      await this.addImages()
+      this.setupObserver()
+      this.setImagePositions()
+    }, 600) // tweak: 300–1500ms depending on feel
   }
 
   setupObserver() {
