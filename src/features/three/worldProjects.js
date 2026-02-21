@@ -69,18 +69,20 @@ export default class WorldProjects {
   }
 
   async init() {
-    // await this.loadTextures()
-    await this.addImages()
     await this.addPlane()
     this.setupListeners()
-    this.setImagePositions()
-    // this.addObjects()
     this.render()
     this.resize()
     this.gsap()
     this.fadeIn()
     this.fadeOut()
-    this.setupObserver()
+
+    setTimeout(async () => {
+      await this.addImages()
+      this.setupObserver()
+      this.setImagePositions()
+      this.resize()
+    }, 600) // tweak: 300–1500ms depending on feel
   }
 
   setupObserver() {
