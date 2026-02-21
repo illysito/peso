@@ -541,14 +541,14 @@ export default class WorldHome {
       opacity: 0,
     })
     gsap.to(this.mainMesh.material.uniforms.u_offset, {
-      // delay: 0.6,
+      delay: 0.6,
       value: 0,
       duration: 1.4 * dur,
       // ease: 'power2.inOut',
       ease: 'power3.in',
     })
     gsap.to(nav, {
-      // delay: 0.6,
+      delay: 0.6,
       opacity: 1,
       duration: 1.4 * dur,
       // ease: 'power2.inOut',
