@@ -14,19 +14,17 @@ function runGeneralFunctions() {
 }
 
 async function runHomeFunctions() {
+  const { default: WorldHome } = await import('./features/three/worldHome')
   const { default: content } = await import('./features/pages/home/content')
-  content()
-
   const { default: mousetrack } = await import(
     './features/pages/home/mousetrack'
   )
-  mousetrack()
-
   const { default: claim } = await import('./features/pages/home/claim')
-  claim()
 
-  const { default: WorldHome } = await import('./features/three/worldHome')
   new WorldHome()
+  content()
+  mousetrack()
+  claim()
 }
 
 async function runProjectsFunctions() {
