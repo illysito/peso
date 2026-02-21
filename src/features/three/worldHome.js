@@ -4,7 +4,6 @@ import * as THREE from 'three'
 import frag from './shaders/homeFrag'
 import transition_frag from './shaders/transitionFrag'
 import vert from './shaders/vertexShader'
-console.log(vert)
 
 const canvas = document.getElementById('three-canvas')
 const nav = document.querySelector('.nav__section')
@@ -196,7 +195,7 @@ export default class WorldHome {
       })
     }
     // time for image canvas
-    if (this.isScrolling || this.isResizing) {
+    if ((this.isScrolling || this.isResizing) && this.imageStore) {
       this.setImagePositions()
     }
     // render & loop

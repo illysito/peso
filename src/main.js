@@ -16,14 +16,17 @@ function runGeneralFunctions() {
 async function runHomeFunctions() {
   const { default: WorldHome } = await import('./features/three/worldHome')
   const { default: content } = await import('./features/pages/home/content')
+  const { default: claim } = await import('./features/pages/home/claim')
   const { default: mousetrack } = await import(
     './features/pages/home/mousetrack'
   )
-  const { default: claim } = await import('./features/pages/home/claim')
+  const domImageWrappers = [
+    ...document.querySelectorAll('.content-img-wrapper'),
+  ]
 
   new WorldHome()
   content()
-  mousetrack()
+  mousetrack(domImageWrappers)
   claim()
 }
 
@@ -34,9 +37,16 @@ async function runProjectsFunctions() {
   const { default: projects } = await import(
     './features/pages/projects/projects'
   )
+  const { default: mousetrack } = await import(
+    './features/pages/home/mousetrack'
+  )
+  const domImageWrappers = [
+    ...document.querySelectorAll('.project-img-wrapper'),
+  ]
 
   new WorldProjects()
   projects()
+  mousetrack(domImageWrappers)
 }
 
 async function runProjectFunctions() {
@@ -49,6 +59,25 @@ async function runProjectFunctions() {
 
   new WorldTransition()
   projectGallery()
+}
+
+async function runCatalogueFunctions() {
+  const { default: catalogue } = await import(
+    './features/pages/catalogue/catalogue'
+  )
+  const { default: WorldTransition } = await import(
+    './features/three/worldTransition'
+  )
+  const { default: mousetrack } = await import(
+    './features/pages/home/mousetrack'
+  )
+  const domImageWrappers = [
+    ...document.querySelectorAll('.catalogue-vid-wrapper'),
+  ]
+
+  new WorldTransition()
+  catalogue()
+  mousetrack(domImageWrappers)
 }
 
 async function runAgendaFunctions() {
@@ -77,5 +106,6 @@ runGeneralFunctions()
 if (document.body.classList.contains('body__home')) runHomeFunctions()
 if (document.body.classList.contains('body__projects')) runProjectsFunctions()
 if (document.body.classList.contains('body__project')) runProjectFunctions()
+if (document.body.classList.contains('body__catalogue')) runCatalogueFunctions()
 if (document.body.classList.contains('body__agenda')) runAgendaFunctions()
 if (document.body.classList.contains('body__about')) runAboutFunctions()

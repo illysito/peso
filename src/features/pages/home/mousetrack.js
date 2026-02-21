@@ -1,11 +1,11 @@
 import gsap from 'gsap'
 
-function mousetrack() {
+function mousetrack(domImageWrappers) {
   const blob = document.querySelector('.mousetrack-container')
   const blobTxt = blob.firstElementChild
-  const domImageWrappers = [
-    ...document.querySelectorAll('.content-img-wrapper'),
-  ]
+  // const domImageWrappers = [
+  //   ...document.querySelectorAll('.content-img-wrapper'),
+  // ]
 
   let blobRadius = 40 // update if changed in webflow
 
@@ -13,6 +13,8 @@ function mousetrack() {
   let targetY = 0
   let currentX = 0
   let currentY = 0
+
+  let isCircle = true
 
   const speed = 0.1
 
@@ -38,6 +40,21 @@ function mousetrack() {
 
   domImageWrappers.forEach((img) => {
     img.addEventListener('mouseenter', () => {
+      // switch shape
+      if (!isCircle) {
+        gsap.to(blob, {
+          borderRadius: 0,
+          duration: 0.4,
+          ease: 'expo.inOut',
+        })
+      } else {
+        gsap.to(blob, {
+          borderRadius: 40,
+          duration: 0.4,
+          ease: 'expo.inOut',
+        })
+      }
+      isCircle = !isCircle
       gsap.to(blob, {
         scale: 1,
         duration: 0.8,

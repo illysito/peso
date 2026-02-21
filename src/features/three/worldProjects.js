@@ -11,6 +11,7 @@ const transitionOverlay = document.querySelector('.transition-overlay')
 const projectCards = document.querySelectorAll('.project-card')
 // const navLinks = document.querySelectorAll('.nav-link-wrapper')
 // const contentLinks = document.querySelectorAll('.content-link')
+const mousetrack = document.querySelector('.mousetrack-container')
 const bodyWrapper = document.querySelector('.body__wrapper')
 const links = document.querySelectorAll('a')
 const wrapper = document.querySelector('.canvas')
@@ -589,6 +590,12 @@ export default class WorldProjects {
           onComplete: () => {
             window.location.href = href
           },
+        })
+        gsap.to(mousetrack, {
+          opacity: 0,
+          duration: 1.4 * dur,
+          // ease: 'power2.inOut',
+          ease: 'power2.out',
         })
       })
     })

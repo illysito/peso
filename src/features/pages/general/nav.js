@@ -10,6 +10,7 @@ function nav() {
   const navLinks = document.querySelectorAll('.nav-link-wrapper')
   const logo = document.querySelector('.logo-h')
   const underscores = document.querySelectorAll('.underscore')
+  const asteriscs = document.querySelectorAll('.asterisc')
 
   // split hero heading
   const split = new SplitType(heroHeading, {
@@ -35,41 +36,37 @@ function nav() {
     scaleX: 0,
     transformOrigin: 'right center',
   })
-  if (document.body.classList.contains('body__projects')) {
-    gsap.set(underscores[1], {
-      scaleX: 1,
-      transformOrigin: 'right center',
-    })
-  }
-  if (document.body.classList.contains('body__project')) {
-    gsap.set(underscores[1], {
-      scaleX: 1,
-      transformOrigin: 'right center',
-    })
-  }
-  if (document.body.classList.contains('body__catalogue')) {
-    gsap.set(underscores[2], {
-      scaleX: 1,
-      transformOrigin: 'right center',
-    })
-  }
-  if (document.body.classList.contains('body__agenda')) {
-    gsap.set(underscores[3], {
-      scaleX: 1,
-      transformOrigin: 'right center',
-    })
-  }
-  if (document.body.classList.contains('body__about')) {
-    gsap.set(underscores[4], {
-      scaleX: 1,
-      transformOrigin: 'right center',
-    })
-  }
-  if (document.body.classList.contains('body__contact')) {
-    gsap.set(underscores[5], {
-      scaleX: 1,
-      transformOrigin: 'right center',
-    })
+  if (asteriscs) {
+    if (document.body.classList.contains('body__projects')) {
+      gsap.set(asteriscs[1], {
+        opacity: 1,
+      })
+    }
+    if (document.body.classList.contains('body__project')) {
+      gsap.set(asteriscs[1], {
+        opacity: 1,
+      })
+    }
+    if (document.body.classList.contains('body__catalogue')) {
+      gsap.set(asteriscs[2], {
+        opacity: 1,
+      })
+    }
+    if (document.body.classList.contains('body__agenda')) {
+      gsap.set(asteriscs[3], {
+        opacity: 1,
+      })
+    }
+    if (document.body.classList.contains('body__about')) {
+      gsap.set(asteriscs[4], {
+        opacity: 1,
+      })
+    }
+    if (document.body.classList.contains('body__contact')) {
+      gsap.set(asteriscs[5], {
+        opacity: 1,
+      })
+    }
   }
 
   // hover on links

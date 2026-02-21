@@ -7,9 +7,11 @@ import vert from './shaders/vertexShader'
 const canvas = document.getElementById('three-canvas')
 const nav = document.querySelector('.nav__section')
 const transitionOverlay = document.querySelector('.transition-overlay')
-const navLinks = document.querySelectorAll('.nav-link-wrapper')
+// const navLinks = document.querySelectorAll('.nav-link-wrapper')
+const links = document.querySelectorAll('a')
 const wrapper = document.querySelector('.canvas')
 const bodyWrapper = document.querySelector('.body__wrapper')
+const mousetrack = document.querySelector('.mousetrack-container')
 const dpr = Math.min(window.devicePixelRatio || 1, 2)
 
 function githubToJsDelivr(permalink) {
@@ -171,7 +173,7 @@ export default class WorldTransition {
 
   fadeOut() {
     const dur = 1.2
-    navLinks.forEach((link) => {
+    links.forEach((link) => {
       if (link.classList.contains('is--out')) return
       link.addEventListener('click', (e) => {
         e.preventDefault()
@@ -196,6 +198,14 @@ export default class WorldTransition {
             window.location.href = href
           },
         })
+        if (mousetrack) {
+          gsap.to(mousetrack, {
+            opacity: 0,
+            duration: 1.4 * dur,
+            // ease: 'power2.inOut',
+            ease: 'power2.out',
+          })
+        }
       })
     })
   }
