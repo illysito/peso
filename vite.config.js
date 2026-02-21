@@ -15,6 +15,7 @@ export default defineConfig({
   build: {
     minify: true,
     manifest: true,
+    /*
     rollupOptions: {
       input: './src/main.js',
       output: {
@@ -27,6 +28,17 @@ export default defineConfig({
         },
       },
       external: ['jquery'],
+    },
+  */
+    rollupOptions: {
+      input: './src/main.js',
+      external: ['jquery'],
+      output: {
+        format: 'es', // ✅ critical
+        entryFileNames: 'main.js', // stable entry URL
+        chunkFileNames: 'chunks/[name]-[hash].js', // ✅ chunks here
+        assetFileNames: 'assets/[name]-[hash][extname]',
+      },
     },
   },
 })
