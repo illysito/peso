@@ -5,7 +5,7 @@ import SplitType from 'split-type'
 gsap.registerPlugin(ScrollTrigger)
 
 function nav() {
-  const heroSection = document.querySelector('.hero__section')
+  // const heroSection = document.querySelector('.hero__section')
   const heroHeading = document.querySelector('.logo-h')
   const navLinks = document.querySelectorAll('.nav-link-wrapper')
   const logo = document.querySelector('.logo-h')
@@ -19,18 +19,18 @@ function nav() {
   })
 
   // disperse vertically on scroll
-  split.chars.forEach((char, index) => {
-    const dispersion = 0.4 * (index / 4 - 0.5)
-    gsap.to(char, {
-      yPercent: 100 * dispersion,
-      scrollTrigger: {
-        trigger: heroSection,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true,
-      },
-    })
-  })
+  // split.chars.forEach((char, index) => {
+  //   const dispersion = 0.1 * (index / 4 - 0.5)
+  //   gsap.to(char, {
+  //     yPercent: 100 * dispersion,
+  //     scrollTrigger: {
+  //       trigger: heroSection,
+  //       start: 'top top',
+  //       end: 'bottom top',
+  //       scrub: true,
+  //     },
+  //   })
+  // })
 
   // set underscores
   gsap.set(underscores, {
@@ -110,7 +110,7 @@ function nav() {
 
   logo.addEventListener('mouseenter', () => {
     gsap.to(logo, {
-      scale: 0.96,
+      scale: 0.99,
     })
   })
   logo.addEventListener('mouseleave', () => {

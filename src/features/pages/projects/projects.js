@@ -9,6 +9,7 @@ function projects() {
   const projectMetadata = document.querySelectorAll('.project-metadata-p')
   const projectCards = document.querySelectorAll('.project-card')
   // const nav = document.querySelector('.nav__section')
+  const highlightColor = '#fff8bb'
 
   projectHeadings.forEach((h) => {
     revealLines(h)
@@ -29,7 +30,7 @@ function projects() {
     w.addEventListener('mouseenter', () => {
       randomChar(title)
       gsap.to(w, {
-        backgroundColor: '#fff8bb',
+        backgroundColor: highlightColor,
         duration: 0.2,
         ease: 'linear',
       })

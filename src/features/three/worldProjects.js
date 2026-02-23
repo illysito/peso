@@ -11,8 +11,8 @@ const transitionOverlay = document.querySelector('.transition-overlay')
 const projectCards = document.querySelectorAll('.project-card')
 // const navLinks = document.querySelectorAll('.nav-link-wrapper')
 // const contentLinks = document.querySelectorAll('.content-link')
-const hamburger = document.querySelector('.hamburger-wrapper')
-const menuWrapper = document.querySelector('.menu-wrapper')
+// const hamburger = document.querySelector('.hamburger-wrapper')
+// const menuWrapper = document.querySelector('.menu-wrapper')
 const mousetrack = document.querySelector('.mousetrack-container')
 const bodyWrapper = document.querySelector('.body__wrapper')
 const links = document.querySelectorAll('a')
@@ -79,7 +79,7 @@ export default class WorldProjects {
     this.gsap()
     this.fadeIn()
     this.fadeOut()
-    this.fadeMenuIn()
+    // this.fadeMenuIn()
 
     setTimeout(async () => {
       await this.addImages()
@@ -612,36 +612,36 @@ export default class WorldProjects {
   }
 
   // menu
-  fadeMenuIn() {
-    const dur = 1
-    hamburger.addEventListener('click', () => {
-      menuWrapper.style.zIndex = 200
-      // menuWrapper.style.zIndex = 200
-      gsap.to(this.mainMesh.material.uniforms.u_offset, {
-        value: 1,
-        duration: 1.4 * dur,
-        // ease: 'power2.inOut',
-        ease: 'power2.out',
-        onComplete: () => {
-          gsap.to(menuWrapper, {
-            opacity: 1,
-            duration: 1.4 * dur,
-            // ease: 'power2.inOut',
-            ease: 'power2.out',
-          })
-        },
-      })
-      gsap.to(bodyWrapper, {
-        y: 8,
-        duration: 0.8,
-        // ease: 'power2.inOut',
-      })
-      gsap.to(nav, {
-        opacity: 0,
-        duration: 1.4 * dur,
-        // ease: 'power2.inOut',
-        ease: 'power2.out',
-      })
-    })
-  }
+  // fadeMenuIn() {
+  //   const dur = 1
+  //   hamburger.addEventListener('click', () => {
+  //     menuWrapper.style.zIndex = 200
+  //     // menuWrapper.style.zIndex = 200
+  //     gsap.to(this.mainMesh.material.uniforms.u_offset, {
+  //       value: 1,
+  //       duration: 1.4 * dur,
+  //       // ease: 'power2.inOut',
+  //       ease: 'power2.out',
+  //       onComplete: () => {
+  //         gsap.to(menuWrapper, {
+  //           opacity: 1,
+  //           duration: 1.4 * dur,
+  //           // ease: 'power2.inOut',
+  //           ease: 'power2.out',
+  //         })
+  //       },
+  //     })
+  //     gsap.to(bodyWrapper, {
+  //       y: 8,
+  //       duration: 0.8,
+  //       // ease: 'power2.inOut',
+  //     })
+  //     gsap.to(nav, {
+  //       opacity: 0,
+  //       duration: 1.4 * dur,
+  //       // ease: 'power2.inOut',
+  //       ease: 'power2.out',
+  //     })
+  //   })
+  // }
 }

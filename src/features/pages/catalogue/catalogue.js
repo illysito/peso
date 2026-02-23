@@ -9,6 +9,13 @@ function catalogue() {
   const catalogueCards = document.querySelectorAll('.catalogue-card')
   const videos = document.querySelectorAll('.catalogue-video')
 
+  const highlightColors = []
+  let colorIndex = 0
+  highlightColors.push('#fff8bb') // yellow
+  highlightColors.push('#f2ffbb') // pistacho
+  highlightColors.push('#dfffcc') // acid
+  highlightColors.push('#ffe6e6') // pink
+
   catalogueHeadings.forEach((h) => {
     revealLines(h)
   })
@@ -24,7 +31,7 @@ function catalogue() {
     w.addEventListener('mouseenter', () => {
       randomChar(title)
       gsap.to(w, {
-        backgroundColor: '#fff8bb',
+        backgroundColor: highlightColors[colorIndex],
         duration: 0.2,
         ease: 'linear',
       })
@@ -43,9 +50,9 @@ function catalogue() {
     const wrapper = subWrapper.parentElement
     const container = wrapper.parentElement
     const img = container.lastElementChild
-    console.log(img)
+
     video.addEventListener('mouseenter', () => {
-      console.log('yay', img)
+      // console.log('yay', img)
       gsap.to(img, {
         opacity: 0,
         duration: 0.2,
@@ -63,6 +70,22 @@ function catalogue() {
         },
       })
     })
+  })
+
+  // change color
+  window.addEventListener('keydown', (e) => {
+    if (e.key === '1') {
+      colorIndex = 0
+    }
+    if (e.key === '2') {
+      colorIndex = 1
+    }
+    if (e.key === '3') {
+      colorIndex = 2
+    }
+    if (e.key === '4') {
+      colorIndex = 3
+    }
   })
 }
 

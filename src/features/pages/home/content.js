@@ -60,24 +60,39 @@ function content() {
 
   contentLinks.forEach((link) => {
     const txt = link.firstElementChild
-    const arrow = link.nextElementSibling
+    const arrow = link.lastElementChild
+    console.log('yay', arrow)
     gsap.set(txt, {
       fontVariationSettings: `"wght" ${350}`,
     })
     link.addEventListener('mouseenter', () => {
-      gsap.to(txt, {
-        fontVariationSettings: `"wght" ${500}`,
+      // gsap.to(txt, {
+      //   fontVariationSettings: `"wght" ${500}`,
+      // })
+      gsap.to(link, {
+        gap: 8,
+        duration: 0.4,
+        ease: 'power1.inOut',
       })
       gsap.to(arrow, {
-        x: 2,
+        width: 20,
+        duration: 0.4,
+        ease: 'power1.inOut',
       })
     })
     link.addEventListener('mouseleave', () => {
-      gsap.to(txt, {
-        fontVariationSettings: `"wght" ${350}`,
-      })
+      // gsap.to(txt, {
+      //   fontVariationSettings: `"wght" ${350}`,
+      // })
       gsap.to(arrow, {
-        x: 0,
+        width: 0,
+        duration: 0.4,
+        ease: 'power1.inOut',
+      })
+      gsap.to(link, {
+        gap: 0,
+        duration: 0.4,
+        ease: 'power1.inOut',
       })
     })
   })
