@@ -8,6 +8,7 @@ function projects() {
   const projectDescriptions = document.querySelectorAll('.project-p')
   const projectMetadata = document.querySelectorAll('.project-metadata-p')
   const projectCards = document.querySelectorAll('.project-card')
+  // const nav = document.querySelector('.nav__section')
 
   projectHeadings.forEach((h) => {
     revealLines(h)
@@ -41,6 +42,30 @@ function projects() {
       })
     })
   })
+
+  // let isClicked = false
+  // nav.addEventListener('click', () => {
+  //   if (!isClicked) {
+  //     projectCards[1].style.display = 'none'
+  //     projectCards[3].style.display = 'none'
+  //     // gsap.to(projectCards[3], {
+  //     //   width: 0,
+  //     //   duration: 0.2,
+  //     //   ease: 'linear',
+  //     //   onComplete: () => {
+  //     //   },
+  //     // })
+  //   } else {
+  //     projectCards[1].style.display = 'flex'
+  //     projectCards[3].style.display = 'flex'
+  //     // gsap.to(projectCards[3], {
+  //     //   width: '33.3333%',
+  //     //   duration: 0.2,
+  //     //   ease: 'linear',
+  //     // })
+  //   }
+  //   isClicked = !isClicked
+  // })
 }
 
 export default projects

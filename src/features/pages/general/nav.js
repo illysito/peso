@@ -11,6 +11,7 @@ function nav() {
   const logo = document.querySelector('.logo-h')
   const underscores = document.querySelectorAll('.underscore')
   const asteriscs = document.querySelectorAll('.asterisc')
+  // const navSection = document.querySelector('.nav__section')
 
   // split hero heading
   const split = new SplitType(heroHeading, {
@@ -177,6 +178,16 @@ function nav() {
   window.addEventListener('mousemove', (e) => {
     mouseX = e.clientX
   })
+
+  // apply blending mode
+  // gsap.to(navSection, {
+  //   mixBlendMode: 'difference',
+  //   scrollTrigger: {
+  //     trigger: heroSection,
+  //     start: 'bottom 7%',
+  //     scrub: true,
+  //   },
+  // })
 }
 
 export default nav

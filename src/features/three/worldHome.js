@@ -7,11 +7,14 @@ import vert from './shaders/vertexShader'
 
 const canvas = document.getElementById('three-canvas')
 const nav = document.querySelector('.nav__section')
+const navMobile = document.querySelector('.nav__section-mobile')
 const transitionOverlay = document.querySelector('.transition-overlay')
 const bodyWrapper = document.querySelector('.body__wrapper')
 const links = document.querySelectorAll('a')
 const wrapper = document.querySelector('.canvas')
 const mousetrack = document.querySelector('.mousetrack-container')
+const hamburger = document.querySelector('.hamburger-wrapper')
+const menuWrapper = document.querySelector('.menu-wrapper')
 const dpr = Math.min(window.devicePixelRatio || 1, 2)
 
 function githubToJsDelivr(permalink) {
@@ -79,6 +82,7 @@ export default class WorldHome {
     this.gsap()
     this.fadeIn()
     this.fadeOut()
+    this.fadeMenuIn()
 
     setTimeout(async () => {
       await this.addImages()
@@ -264,14 +268,16 @@ export default class WorldHome {
           'https://github.com/illysito/peso/blob/0b321199ab67aa71ec8601bcf7461aa1525e9cee/imgs/GaldarEnDanza_1.webp'
         )
       ),
+      // dama
       loader.loadAsync(
         githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
+          'https://github.com/illysito/peso/blob/38bc5380f28b8fafcbd41781dc03235e8ead29ef/imgs/Dama1.webp'
         )
       ),
+      // almagre
       loader.loadAsync(
         githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
+          'https://github.com/illysito/peso/blob/dd1718beb93789193912c29e1614805c9db31ec2/imgs/Almagre1.webp'
         )
       ),
       // david y goliat
@@ -280,15 +286,16 @@ export default class WorldHome {
           'https://github.com/illysito/peso/blob/0b321199ab67aa71ec8601bcf7461aa1525e9cee/imgs/DavidGoliat_1.webp'
         )
       ),
+      // sorites
+      loader.loadAsync(
+        githubToJsDelivr(
+          'https://github.com/illysito/peso/blob/dd1718beb93789193912c29e1614805c9db31ec2/imgs/Sorites4.webp'
+        )
+      ),
       // azahar
       loader.loadAsync(
         githubToJsDelivr(
           'https://github.com/illysito/peso/blob/44ca43cf8d88d16f4fa3bce0caeb8f25b0c31a60/imgs/_Azahar1.webp'
-        )
-      ),
-      loader.loadAsync(
-        githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/1d881a991d9562135d7a3123b4d44682860c2e89/imgs/Azahar1.jpg'
         )
       ),
     ])
@@ -300,14 +307,16 @@ export default class WorldHome {
           'https://github.com/illysito/peso/blob/53ea88445a66cd11da545f987ef8fc53a0d330c3/imgs/GaldarEnDanza_2.webp'
         )
       ),
+      // dama
       loader.loadAsync(
         githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/0b6597b7e24369b4a3c5158416d13a7b701cb236/imgs/test%20img%202.webp'
+          'https://github.com/illysito/peso/blob/38bc5380f28b8fafcbd41781dc03235e8ead29ef/imgs/Dama2.webp'
         )
       ),
+      // almagre
       loader.loadAsync(
         githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/0b6597b7e24369b4a3c5158416d13a7b701cb236/imgs/test%20img%202.webp'
+          'https://github.com/illysito/peso/blob/dd1718beb93789193912c29e1614805c9db31ec2/imgs/Almagre2.webp'
         )
       ),
       // david y goliat
@@ -316,15 +325,16 @@ export default class WorldHome {
           'https://github.com/illysito/peso/blob/53ea88445a66cd11da545f987ef8fc53a0d330c3/imgs/DavidGoliat_2.webp'
         )
       ),
+      // sorites
+      loader.loadAsync(
+        githubToJsDelivr(
+          'https://github.com/illysito/peso/blob/dd1718beb93789193912c29e1614805c9db31ec2/imgs/Sorites3.webp'
+        )
+      ),
       // azahar
       loader.loadAsync(
         githubToJsDelivr(
           'https://github.com/illysito/peso/blob/44ca43cf8d88d16f4fa3bce0caeb8f25b0c31a60/imgs/_Azahar2.webp'
-        )
-      ),
-      loader.loadAsync(
-        githubToJsDelivr(
-          'https://github.com/illysito/peso/blob/0294519c879b1beb194295665bea435293f643fa/imgs/example.webp'
         )
       ),
     ])
@@ -566,7 +576,8 @@ export default class WorldHome {
   fadeOut() {
     const dur = 0.9
     links.forEach((link) => {
-      if (link.classList.contains('is--out')) return
+      const outerLink = link.firstElementChild
+      if (outerLink && outerLink.classList.contains('is--out')) return
       link.addEventListener('click', (e) => {
         this.linkClicked = true
         e.preventDefault()
@@ -597,6 +608,40 @@ export default class WorldHome {
           // ease: 'power2.inOut',
           ease: 'power2.out',
         })
+      })
+    })
+  }
+
+  // menu
+  fadeMenuIn() {
+    const dur = 1
+    hamburger.addEventListener('click', () => {
+      menuWrapper.style.zIndex = 200
+      // menuWrapper.style.zIndex = 200
+      gsap.to(this.mainMesh.material.uniforms.u_offset, {
+        value: 1,
+        duration: 1.4 * dur,
+        // ease: 'power2.inOut',
+        ease: 'power2.out',
+        onComplete: () => {
+          gsap.to(menuWrapper, {
+            opacity: 1,
+            duration: 1.4 * dur,
+            // ease: 'power2.inOut',
+            ease: 'power2.out',
+          })
+        },
+      })
+      gsap.to(bodyWrapper, {
+        y: 8,
+        duration: 0.8,
+        // ease: 'power2.inOut',
+      })
+      gsap.to(navMobile, {
+        opacity: 0,
+        duration: 1.4 * dur,
+        // ease: 'power2.inOut',
+        ease: 'power2.out',
       })
     })
   }
