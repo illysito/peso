@@ -39,27 +39,27 @@ function nav() {
   })
   if (asteriscs) {
     if (document.body.classList.contains('body__projects')) {
-      gsap.set(asteriscs[1], {
-        opacity: 1,
-      })
-    }
-    if (document.body.classList.contains('body__project')) {
-      gsap.set(asteriscs[1], {
-        opacity: 1,
-      })
-    }
-    if (document.body.classList.contains('body__catalogue')) {
       gsap.set(asteriscs[2], {
         opacity: 1,
       })
     }
-    if (document.body.classList.contains('body__agenda')) {
+    // if (document.body.classList.contains('body__project')) {
+    //   gsap.set(asteriscs[1], {
+    //     opacity: 1,
+    //   })
+    // }
+    if (document.body.classList.contains('body__catalogue')) {
       gsap.set(asteriscs[3], {
         opacity: 1,
       })
     }
-    if (document.body.classList.contains('body__about')) {
+    if (document.body.classList.contains('body__agenda')) {
       gsap.set(asteriscs[4], {
+        opacity: 1,
+      })
+    }
+    if (document.body.classList.contains('body__about')) {
+      gsap.set(asteriscs[1], {
         opacity: 1,
       })
     }

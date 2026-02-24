@@ -8,6 +8,7 @@ function catalogue() {
   const catalogueMetadata = document.querySelectorAll('.catalogue-metadata-p')
   const catalogueCards = document.querySelectorAll('.catalogue-card')
   const videos = document.querySelectorAll('.catalogue-video')
+  const filterWrappers = document.querySelectorAll('.filter-wrapper')
 
   const highlightColors = []
   let colorIndex = 0
@@ -86,6 +87,47 @@ function catalogue() {
     if (e.key === '4') {
       colorIndex = 3
     }
+  })
+
+  // filter
+  let filterTags = ['is--all', 'is--original', 'is--curation', 'is--ian'] // [all, originals, curation, ian]
+  let currentFilter = 'is--all'
+  let previousFilter = 'is-all'
+  filterWrappers.forEach((w, index) => {
+    w.addEventListener('click', () => {
+      // reset array and put to 1 de corresponding filter tag
+      currentFilter = filterTags[index]
+      if (currentFilter === previousFilter) return
+      previousFilter = currentFilter
+      // all opacity 0
+      const tl = gsap.timeline()
+      tl.to(catalogueCards, {
+        opacity: 0,
+        duration: 1,
+        stagger: 0.1,
+        ease: 'power2.inOut',
+        onComplete: () => {
+          catalogueCards.forEach((c) => {
+            if (currentFilter === 'is--all') {
+              c.style.display = 'flex'
+            }
+            if (
+              !c.classList.contains(currentFilter) &&
+              currentFilter != 'is--all'
+            ) {
+              c.style.display = 'none'
+            } else {
+              c.style.display = 'flex'
+            }
+          })
+        },
+      }).to(catalogueCards, {
+        opacity: 1,
+        duration: 1,
+        stagger: 0.1,
+        ease: 'power2.inOut',
+      })
+    })
   })
 }
 
