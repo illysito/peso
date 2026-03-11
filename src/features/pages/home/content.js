@@ -75,7 +75,7 @@ function content() {
         ease: 'power1.inOut',
       })
       gsap.to(arrow, {
-        width: 20,
+        width: 16,
         duration: 0.4,
         ease: 'power1.inOut',
       })

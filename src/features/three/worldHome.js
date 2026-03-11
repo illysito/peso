@@ -101,7 +101,17 @@ export default class WorldHome {
           item.mesh.visible = entry.isIntersecting
 
           // optional: if it just became visible, you can force a one-time rect update
-          if (entry.isIntersecting) item.needsRect = true
+          if (entry.isIntersecting) {
+            item.needsRect = true
+            const dly = 0.2 * Math.random()
+            // IMAGE LIQUID REVEAL
+            gsap.to(item.mesh.material.uniforms.u_scroll, {
+              delay: 0.4 + dly,
+              value: 2.0,
+              duration: 1.2,
+              ease: 'power2.inOut',
+            })
+          }
         }
       },
       {
@@ -261,6 +271,12 @@ export default class WorldHome {
       )
     )
 
+    const limeBG = await loader.loadAsync(
+      githubToJsDelivr(
+        'https://github.com/illysito/peso/blob/825c07466e0db27442ea707ee43327609a049fe7/imgs/lime-square.png'
+      )
+    )
+
     const texturesFront = await Promise.all([
       // galdar en danza
       loader.loadAsync(
@@ -339,11 +355,12 @@ export default class WorldHome {
       ),
     ])
 
-    return { perlin, texturesFront, texturesBack }
+    return { perlin, limeBG, texturesFront, texturesBack }
   }
 
   async addImages() {
-    const { perlin, texturesFront, texturesBack } = await this.loadTextures()
+    const { perlin, limeBG, texturesFront, texturesBack } =
+      await this.loadTextures()
     this.imageStore = this.domImageWrappers.map((img, index) => {
       let bounds = img.getBoundingClientRect()
 
@@ -357,14 +374,17 @@ export default class WorldHome {
           u_time: { value: 0 },
           u_resolution: { value: new THREE.Vector2(1, 1) },
           u_offset: { value: 0 },
+          u_scroll: { value: 0 },
           u_red: { value: 0 },
           u_green: { value: 0 },
           u_blue: { value: 0 },
           u_image_1: { value: texturesFront[index] },
           u_image_2: { value: texturesBack[index] },
           u_displacement: { value: perlin },
+          u_bg: { value: limeBG },
         },
       })
+      material.transparent = true
       let mesh = new THREE.Mesh(geometry, material)
 
       this.scene.add(mesh)
