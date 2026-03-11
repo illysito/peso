@@ -106,7 +106,7 @@ void main()
   vec4 scroll_mix = (img * (0.5 * u_scroll) + d_img_3 * (1.0 - 0.5 * u_scroll));
 
   gl_FragColor = scroll_mix;
-  gl_FragColor = img;
+  // gl_FragColor = img;
 }
 `
 export default frag

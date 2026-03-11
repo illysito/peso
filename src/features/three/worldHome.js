@@ -106,7 +106,7 @@ export default class WorldHome {
             const dly = 0.2 * Math.random()
             // IMAGE LIQUID REVEAL
             gsap.to(item.mesh.material.uniforms.u_scroll, {
-              delay: 0.4 + dly,
+              delay: 0.2 + dly,
               value: 2.0,
               duration: 1.2,
               ease: 'power2.inOut',
@@ -384,7 +384,7 @@ export default class WorldHome {
           u_bg: { value: limeBG },
         },
       })
-      material.transparent = true
+      // material.transparent = true
       let mesh = new THREE.Mesh(geometry, material)
 
       this.scene.add(mesh)
