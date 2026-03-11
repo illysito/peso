@@ -6,6 +6,7 @@ precision highp float;
 uniform float u_time;
 uniform vec2 u_resolution;
 uniform float u_offset;
+uniform float u_scroll;
 uniform float u_grain;
 uniform float u_red;
 uniform float u_green;
@@ -13,6 +14,7 @@ uniform float u_blue;
 uniform sampler2D u_image_1;
 uniform sampler2D u_image_2;
 uniform sampler2D u_displacement;
+uniform sampler2D u_bg;
 
 varying vec2 v_texcoord;
 
@@ -70,10 +72,13 @@ void main()
   vec4 displacement = texture2D(u_displacement, coords);
 
   float displaceForce1 = displacement.r * u_offset * displacementCoef * (1.0 + gravityStrength * g);
-  vec2 uvDisplaced1 = vec2(coords.x, coords.y + displaceForce1);
+  float displaceForce3 = (displacement.r * (1.0 - u_offset) * displacementCoef * (1.0 + gravityStrength * g));
+  // It turns 0 when scroll turns one (LIQUID REVEAL)
+  displaceForce3 *= 2.0 - u_scroll; 
+  vec2 uvDisplaced1 = vec2(coords.x, coords.y + displaceForce1 - displaceForce3);
 
   float displaceForce2 = displacement.r * (1.0 - u_offset) * displacementCoef * (1.0 + gravityStrength * g);
-  vec2 uvDisplaced2 = vec2(coords.x, coords.y - displaceForce2);
+  vec2 uvDisplaced2 = vec2(coords.x, coords.y - displaceForce2 + 0.02 * sin(4.0 * u_time));
 
   // displacement + color split
   vec4 d_img_1 = texture2D(u_image_1, uvDisplaced1);
@@ -88,10 +93,19 @@ void main()
   float b2 = texture2D(u_image_2, vec2(uvDisplaced2.x + 0.08 * u_red, uvDisplaced2.y - 0.1 * u_blue)).b;
   d_img_2 = vec4(r2, g2, b2, 1.0);
 
+  // TRANSPARENT FOR REVEAL FROM NOTHING!
+  float displaceForceTransp = displacement.r * 0.4 * u_scroll * displacementCoef * (1.0 + gravityStrength * g);
+  vec2 uvDisplacedTransp = vec2(coords.x - displaceForceTransp, coords.y + displaceForceTransp);
+  vec4 d_img_3 = texture2D(u_bg, uvDisplacedTransp);
+
+  // FINAL MIX
   vec4 img = (d_img_1 * (1.0 - u_offset) + d_img_2 * u_offset);
+  img += noise * noiseFactor * 0.5 * u_scroll;
 
-  img += noise * noiseFactor;
+  // SCROLL MIX
+  vec4 scroll_mix = (img * (0.5 * u_scroll) + d_img_3 * (1.0 - 0.5 * u_scroll));
 
+  gl_FragColor = scroll_mix;
   gl_FragColor = img;
 }
 `
